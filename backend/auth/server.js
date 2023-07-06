@@ -1,6 +1,8 @@
 const express = require("express");
 
 require("dotenv").config();
+const session = require('express-session');
+const { v4 } = require('uuid');
 
 const app = express();
 
@@ -12,8 +14,19 @@ app.use(express.json());
 
 
 app.get("/", (req, res) => {
-  res.send("Hello, Welcome to my ConnectApp");
+  res.send("Hello, Welcome to my ConnectApp"); 
 });
+
+app.use(session({
+  secret:process.env.SECRET,
+  saveUninitialized: true,
+  resave: false,
+  cookie:{
+    // httpOnly: false,
+    // secure: true
+  }   
+}))
+
 
 
 
