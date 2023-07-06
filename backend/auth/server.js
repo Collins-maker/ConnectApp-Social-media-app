@@ -4,8 +4,6 @@ require("dotenv").config();
 
 const app = express();
 
-const userRoutes = require('./src/routes/userRoutes');
-const router = require('./src/routes/signUpRoutes');
 const signUpRoutes = require("./src/routes/signUpRoutes");
 const loginRoutes = require('./src/routes/loginRoutes')
 
@@ -17,7 +15,7 @@ app.get("/", (req, res) => {
   res.send("Hello, Welcome to my ConnectApp");
 });
 
-app.use(userRoutes);
+
 
 app.use(signUpRoutes);
 app.use(loginRoutes);

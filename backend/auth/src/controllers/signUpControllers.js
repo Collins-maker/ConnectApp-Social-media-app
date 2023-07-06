@@ -25,6 +25,6 @@ module.exports ={
 
                         console.log(results)
       }
-      res.send(hashed_pwd);
+      res.send(hashed_pwd).json({success:true, message:'registered successfully'});
     }
 }

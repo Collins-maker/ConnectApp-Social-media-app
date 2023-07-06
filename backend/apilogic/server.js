@@ -5,9 +5,6 @@ require("dotenv").config();
 const app = express();
 
 const userRoutes = require('./src/routes/userRoutes');
-const router = require('./src/routes/signUpRoutes');
-const signUpRoutes = require("./src/routes/signUpRoutes");
-const loginRoutes = require('./src/routes/loginRoutes')
 
 app.use(express.json());
 
@@ -19,12 +16,10 @@ app.get("/", (req, res) => {
 
 app.use(userRoutes);
 
-app.use(signUpRoutes);
-app.use(loginRoutes);
 
 
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 app.listen(port, () => {
   console.log(`server is loading ${port}`);
 });
