@@ -5,16 +5,15 @@ USE ConnectApp;
 CREATE SCHEMA users;
 CREATE SCHEMA posts;
 CREATE SCHEMA notifications;
-CREATE SCHEMA chat;
 
 CREATE TABLE users.userProfile(
    user_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
    first_name VARCHAR(255) NOT NULL,
    last_name VARCHAR(255),
    username VARCHAR(30) UNIQUE,
-   Gender VARCHAR(30),
+   gender VARCHAR(30),
    email_address VARCHAR(50) UNIQUE,
-   Country VARCHAR(255),
+   country VARCHAR(255),
    phone_number VARCHAR(255) NOT NULL,
    date_of_birth VARCHAR(255) NOT NULL,
    registration_date DATETIME NOT NULL DEFAULT GETDATE(),
@@ -23,14 +22,12 @@ CREATE TABLE users.userProfile(
    age AS (DATEDIFF(YEAR, date_of_birth, GETDATE())),
    followers INT,
    followings INT,
-   posts INT
+   posts INT,
+   password VARCHAR (100) NOT NULL,
+   is_deleted BIT NOT NULL DEFAULT 0
 );
 
-ALTER TABLE users.userProfile
-ADD password VARCHAR(100) NOT NULL;
 
-ALTER TABLE users.userProfile
-ADD is_deleted BIT NOT NULL DEFAULT 0;
 
 --check the results
 
@@ -42,8 +39,8 @@ SELECT * FROM users.userProfile
 
 CREATE TABLE users.followTable(
   follow_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-  user_id INT FOREIGN KEY REFERENCES users.userProfile(user_id),
-  following_id INT FOREIGN KEY REFERENCES users.userProfile(user_id),
+  user_id INT FOREIGN KEY REFERENCES users.userProfile(user_id) ,
+  following_id INT FOREIGN KEY REFERENCES users.userProfile(user_id) ,
   created_at DATETIME NOT NULL DEFAULT GETDATE()
 );
 
@@ -58,6 +55,7 @@ CREATE TABLE posts.postTable(
     created_at DATETIME NOT NULL DEFAULT GETDATE()
 );
 
+
 CREATE TABLE posts.likeTable(
     like_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
     post_id INT FOREIGN KEY REFERENCES posts.postTable(post_id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -66,9 +64,6 @@ CREATE TABLE posts.likeTable(
     created_at DATETIME NOT NULL DEFAULT GETDATE()
 );
 
-
----Dropping table
-DROP TABLE posts.likeTable
 
 
 SELECT * FROM posts.likeTable 
@@ -88,17 +83,22 @@ CREATE TABLE posts.commentsTable(
 CREATE TABLE posts.repliesTable(
     Reply_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
     Replied_by_id INT FOREIGN KEY REFERENCES users.userProfile(user_id),
-    comment_id INT FOREIGN KEY REFERENCES posts.commentsTable(Comment_id),
+    comment_id INT FOREIGN KEY REFERENCES posts.commentsTable(Comment_id)  ON DELETE CASCADE ON UPDATE CASCADE,
     Reply_text VARCHAR(1000),
     created_at DATETIME NOT NULL DEFAULT GETDATE()
 );
 
-DROP TABLE posts.repliesTable
-
-CREATE TABLE chat.chatsTable(
- chat_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
- created_at DATETIME NOT NULL DEFAULT GETDATE()
+CREATE TABLE notifications.notificationTable(
+    notify_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    user_id INT FOREIGN KEY REFERENCES users.userProfile(user_id)  ON DELETE CASCADE ON UPDATE CASCADE,
+    notification_type VARCHAR(255),
+    post_id INT FOREIGN KEY REFERENCES posts.postTable(post_id),
+    sender_id INT FOREIGN KEY REFERENCES users.userProfile(user_id),
+    is_read BIT,
+    created_at DATETIME NOT NULL DEFAULT GETDATE()
 );
+
+--not implemented
 
 CREATE TABLE chat.messagesTable(
     message_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
@@ -109,12 +109,3 @@ CREATE TABLE chat.messagesTable(
     created_at DATETIME NOT NULL DEFAULT GETDATE()
 );
 
-CREATE TABLE notifications.notificationTable(
-    notify_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-    user_id INT FOREIGN KEY REFERENCES users.userProfile(user_id),
-    notification_type VARCHAR(255),
-    post_id INT FOREIGN KEY REFERENCES posts.postTable(post_id),
-    sender_id INT FOREIGN KEY REFERENCES users.userProfile(user_id),
-    is_read BIT,
-    created_at DATETIME NOT NULL DEFAULT GETDATE()
-);

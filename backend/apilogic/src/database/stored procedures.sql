@@ -18,7 +18,7 @@ CREATE OR ALTER PROCEDURE insertUser
 	@username VARCHAR(50),
     @gender VARCHAR(50),
     @email VARCHAR(50),
-    @Country VARCHAR(255),
+    @country VARCHAR(255),
     @phone_number VARCHAR(255),
     @date_of_birth VARCHAR(50),
     @password VARCHAR(100)
@@ -29,7 +29,7 @@ BEGIN
     SELECT @user_id = ISNULL(MAX(user_id),0)+ 1 FROM users.userProfile;
 
 
-    INSERT INTO users.userProfile (first_name,last_name,username,gender, email_address,Country,phone_number,date_of_birth, Password)
+    INSERT INTO users.userProfile (first_name,last_name,username,gender, email_address,country,phone_number,date_of_birth, Password)
     VALUES (@first_name, @last_name,@username, @gender,@email,@country,@phone_number,@date_of_birth,@password);
 END;
 
@@ -38,6 +38,13 @@ END;
 
 --SELECT * FROM users.userProfile
 
+
+CREATE OR ALTER PROCEDURE getAllUsers
+AS 
+BEGIN
+SELECT * FROM users.userProfile 
+WHERE is_deleted = 0;
+END;
 
 
 
