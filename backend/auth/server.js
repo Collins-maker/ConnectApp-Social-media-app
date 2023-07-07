@@ -5,33 +5,44 @@ const session = require('express-session');
 const { v4 } = require('uuid');
 
 const app = express();
+const authorize = require('./src/middlewares/session')
 
-const signUpRoutes = require("./src/routes/signUpRoutes");
-const loginRoutes = require('./src/routes/loginRoutes')
+
+const authenticationRoutes = require('./src/routes/authenticationRoutes')
 
 app.use(express.json());
 
-
-
-app.get("/", (req, res) => {
-  res.send("Hello, Welcome to my ConnectApp"); 
-});
-
+const oneDay = 60 * 60 * 1000 * 24;
 app.use(session({
-  secret:process.env.SECRET,
+  secret: process.env.SECRET,
   saveUninitialized: true,
+  genid: ()=>v4(),
   resave: false,
   cookie:{
-    // httpOnly: false,
-    // secure: true
+    httpOnly: false,
+    secure:false,
+    maxAge: oneDay
   }   
 }))
 
 
 
+app.get("/", (req, res) => {
+  console.log(req.sessionID);
+  res.send("Hello, Welcome to my ConnectApp"); 
+});
 
-app.use(signUpRoutes);
-app.use(loginRoutes);
+app.get('/logout', (req,res) =>{
+  req.session.destroy()
+});
+
+
+
+
+
+
+app.use(authenticationRoutes);
+
 
 
 
