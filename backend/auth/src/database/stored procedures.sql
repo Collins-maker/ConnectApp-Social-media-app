@@ -154,13 +154,19 @@ END;
 17
 
 -- Get Post By ID
-CREATE PROCEDURE getPostByID
+CREATE OR ALTER PROCEDURE getPostByID
     @post_id INT
 AS
 BEGIN
     SELECT *
     FROM posts.postTable
     WHERE post_id = @post_id;
+END;
+
+CREATE OR ALTER PROCEDURE getAllPosts
+AS
+BEGIN
+SELECT * FROM * posts.postTable
 END;
 
 -- Get user posts

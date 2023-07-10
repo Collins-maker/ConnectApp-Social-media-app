@@ -54,6 +54,8 @@ CREATE TABLE posts.postTable(
     Comment_count VARCHAR(255),
     created_at DATETIME NOT NULL DEFAULT GETDATE()
 );
+ALTER TABLE posts.postTable
+ADD is_delete BIT NOT NULL DEFAULT 0;
 
 
 

@@ -2,6 +2,9 @@ const config = require("../config/config");
 const mssql = require("mssql");
 const bcrypt = require("bcrypt");
 const authorize = require("../middlewares/session");
+const markup = require('../utils/markup')
+const sendMail = require('../utils/sendMail')
+
 
 //signup user 
 
@@ -26,9 +29,68 @@ const authorize = require("../middlewares/session");
                       .execute('insertUser')
 
                       console.log(results)
+
+                      if (results.rowsAffected[0] > 0) {
+
+                        // Templating
+            
+                        const html = await markup('./src/views/signup.ejs', {
+            
+                            name: user.username,
+            
+                            text: "At our social media platform, you'll find a wide range of things in various genres, from stories to pictures. Feel free to explore the social media platform, find your next favorite person, and enjoy the friendship journey. If you have any questions or need assistance, don't hesitate to reach out to our friendly staff.",
+            
+                        });
+            
+            
+            
+            
+                        const message_options = {
+            
+                            to: user.email_address,
+            
+                            from: process.env.EMAIL_USER,
+            
+                            subject: 'Registration to Connect Social Media',
+            
+                            html: html,
+            
+                        };
+            
+            
+            
+            
+                        await sendMail(message_options);
+            
+                        console.log(results);
+            
+            
+            
+            
+                        return res.status(201).json({
+            
+                            success: true,
+            
+                            message: 'User has been created',
+            
+                            data: results.recordset,
+            
+                        });
+                      }
+                    }
+            
+                     else {
+            
+                        return res.status(500).json({
+            
+                            success: false,
+            
+                            message: 'user not inserted',
+            
+                        });
+            
+                    }
     }
-    res.send(hashed_pwd).json({success:true, message:'registered successfully'});
-  };
 
 
 

@@ -146,7 +146,8 @@ CREATE OR ALTER PROCEDURE deletePost
     @post_id INT
 AS
 BEGIN
-    DELETE FROM posts.postTable
+    Update posts.postTable
+    SET is_deleted=1
     WHERE post_id = @post_id;
 END;
 
@@ -161,6 +162,14 @@ BEGIN
     SELECT *
     FROM posts.postTable
     WHERE post_id = @post_id;
+END;
+
+--get all posts
+CREATE OR ALTER PROCEDURE getAllPosts
+AS
+BEGIN
+SELECT * FROM  posts.postTable
+WHERE is_deleted = 0
 END;
 
 -- Get user posts

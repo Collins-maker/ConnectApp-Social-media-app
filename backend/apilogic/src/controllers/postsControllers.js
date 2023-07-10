@@ -50,12 +50,13 @@ const config = require('../config/config');
                             .input('user_id', post.user_id)
                             .input('written_text', post.written_text)
                             .input('image_url',post.image_url)
+                            .input('video_url',post.video_url)
                             .execute('insertPost')
 
                             console.log(results)
 
  }
- res.send(hashed_pwd).json({success:true, message:'posted successfully'});
+ res.status(200).json({success:true, message:'posted successfully'});
 }
 
 //update posts
@@ -73,7 +74,11 @@ async function updatePost(req, res){
                             console.log(results)
 
  }
- res.send(hashed_pwd).json({success:true, message:'post updated successfully'});
+ res.status(200).json({
+        success: true,
+        message: 'Posted successfully',
+        data: results.recordset[0], // Assuming the first record is the newly inserted one
+      });
 }
 
 //get postby id
@@ -89,7 +94,7 @@ async function getPostByID(req, res){
                             console.log(results)
 
  }
- res.send(hashed_pwd).json({success:true, message:'post fetched successfully'});
+ res.status(200).json({success:true, message:'post fetched successfully'});
 }
 
 //delete a post
@@ -105,7 +110,7 @@ async function deletePost(req, res){
                             console.log(results)
 
  }
- res.send(hashed_pwd).json({success:true, message:'post deleted successfully'});
+ res.status(200).json({success:true, message:'post deleted successfully'});
 }
 
 async function getFeedPosts(req, res){
@@ -120,7 +125,7 @@ async function getFeedPosts(req, res){
                             console.log(results)
 
  }
- res.send(hashed_pwd).json({success:true, message:'posts from friends fetched successfully'});
+ res.status(200).json({success:true, message:'posts from friends fetched successfully'});
 }
 
 
