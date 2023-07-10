@@ -56,6 +56,7 @@ CREATE TABLE posts.postTable(
 );
 
 
+
 CREATE TABLE posts.likeTable(
     like_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
     post_id INT FOREIGN KEY REFERENCES posts.postTable(post_id) ON DELETE CASCADE ON UPDATE CASCADE,
