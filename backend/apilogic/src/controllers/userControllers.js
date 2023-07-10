@@ -39,5 +39,38 @@ const config = require('../config/config');
    }
  }
 
+ async function getUsersFollowers(req, res) {
+   let user_id = req.params.user_id;
+   let users;
+ 
+   try {
+     let sql = await mssql.connect(config);
+     if (sql.connected) {
+       let results = await sql.request()
+         .input('user_id', user_id)
+         .execute('getUserFollowers');
+ 
+       users = results.recordset;
+       res.json({
+         success: true,
+         message: 'users fetched successfully',
+         results: users
+       });
+     } else {
+       res.status(500).json({
+         success: false,
+         message: 'Failed to connect to the database'
+       });
+     }
+   } catch (error) {
+     console.error(error);
+     res.status(500).json({
+       success: false,
+       message: 'An error occurred while fetching the users'
+     });
+   }
+ }
+ 
 
- module.exports ={getAllUsers, getUsersByUsername}
+
+ module.exports ={getAllUsers, getUsersByUsername, getUsersFollowers}

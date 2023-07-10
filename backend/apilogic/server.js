@@ -5,6 +5,8 @@ require("dotenv").config();
 const app = express();
 
 const userRoutes = require('./src/routes/userRoutes');
+const postRoutes = require('./src/routes/postRoutes');
+const reactionRoutes = require('./src/routes/reactionsRoutes');
 
 app.use(express.json());
 
@@ -15,6 +17,10 @@ app.get("/", (req, res) => {
 });
 
 app.use(userRoutes);
+
+app.use(postRoutes);
+
+app.use(reactionRoutes);
 
 
 
