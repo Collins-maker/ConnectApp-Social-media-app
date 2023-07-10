@@ -9,8 +9,8 @@ postRoutes.get('/posts/:post_id',getPostByID);
 postRoutes.get('/posts/:user_id',getFeedPosts);
 postRoutes.get('/user/posts', getUserPosts);
 postRoutes.post('/post',insertPost);
-postRoutes.put('post',updatePost);
-postRoutes.delete('post', deletePost);
+postRoutes.put('/post',updatePost);
+postRoutes.delete('/posts/:post_id', deletePost);
 
 module.exports = postRoutes;
 

@@ -71,6 +71,18 @@ BEGIN
     WHERE username = @username;
 END;
 
+--DELETE FROM  users.userProfile
+--WHERE username = 'Mtumishi'
+
+--select * from users.userProfile
+
+--DELETE FROM  posts.postTable
+--WHERE user_id = 5
+
+--select * from posts.postTable
+
+
+
 -- Get user By usename
 CREATE OR ALTER PROCEDURE getUserByUsername
     @username VARCHAR(30)
@@ -81,7 +93,9 @@ BEGIN
     WHERE username = @username;
 END;
 
+
 --EXEC getUserByUsername @username='Mtumishi'
+
 
 
 -- Get user posts
@@ -94,17 +108,28 @@ BEGIN
     WHERE user_id = @user_id;
 END;
 
-
+--needs modification
 CREATE OR ALTER PROCEDURE getUserFollowers
-@user_id INT
+@username VARCHAR
 
 AS 
 BEGIN
 
-SELECT followers FROM users.userProfile 
-WHERE user_id=@user_id;
+SELECT username FROM users.userProfile 
+WHERE username=@username;
 
 END;
+
+EXEC getUserByUsername 'Mtumishi'
+
+CREATE OR ALTER PROCEDURE follow
+@user_id INT NOT NULL,
+@following_id INT NOT NULL
+AS
+BEGIN
+INSERT INTO  users.followTable(user_id,following_id)
+
+SELECT * FROM users.followTable
 
 --POST  PROCEDURES
 -- Insert Post
@@ -155,7 +180,7 @@ END;
 17
 
 -- Get Post By ID
-CREATE PROCEDURE getPostByID
+CREATE  OR ALTER PROCEDURE getPostByID
     @post_id INT
 AS
 BEGIN
@@ -163,6 +188,8 @@ BEGIN
     FROM posts.postTable
     WHERE post_id = @post_id;
 END;
+
+
 
 --get all posts
 CREATE OR ALTER PROCEDURE getAllPosts
@@ -232,7 +259,7 @@ BEGIN
     END
 END;
 
-EXEC posts.likePost @post_id=18, @user_id=7;
+EXEC posts.likePost @post_id=9, @user_id=4;
 
 select * from posts.likeTable
 
@@ -246,3 +273,34 @@ SELECT * FROM posts.postTable
     (21,2),
     (22,2),
     (23,1);
+
+
+    ---Insert comments:
+    CREATE OR ALTER PROCEDURE insertComment
+  @user_id INT,
+  @post_id INT,
+  @comment_text VARCHAR(1000)
+AS
+BEGIN
+  SET NOCOUNT ON;
+
+  INSERT INTO posts.commentsTable (user_id, post_id, Comment_Text)
+  VALUES (@user_id, @post_id, @comment_text);
+END
+
+EXEC insertComment @user_id =27,@post_id =9,@comment_text ='I love it!';
+
+SELECT * FROM posts.commentsTable
+
+--GETTING ALL comments for a specific post
+CREATE OR ALTER PROCEDURE getAllPostComment
+@post_id INT
+AS
+BEGIN
+SELECT * from posts.commentsTable
+WHERE post_id = @post_id
+END
+
+EXEC getAllPostComment 9;
+
+SELECT * FROM users.userProfile

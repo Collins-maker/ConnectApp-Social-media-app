@@ -102,3 +102,226 @@ BEGIN
 END;
 GO
 
+--notifications triggers
+CREATE TRIGGER commentPostTrigger
+ON posts.commentsTable
+AFTER INSERT
+AS
+BEGIN
+  SET NOCOUNT ON;
+
+  DECLARE @user_id INT;
+  DECLARE @post_id INT;
+  DECLARE @notification_type VARCHAR(MAX);
+
+ 
+
+  -- Retrieve the commented user ID and post ID
+  SELECT @user_id = c.user_id, @post_id = c.post_id
+  FROM posts.commentsTable AS c
+  WHERE c.user_id = (SELECT user_id FROM inserted);
+
+ 
+
+  -- Retrieve the name of the commented user
+  DECLARE @commentedUserName VARCHAR(255);
+  SELECT @commentedUserName = u.username
+  FROM users.userProfile AS u
+  WHERE u.user_id = @user_id;
+
+ 
+
+  -- Create a notification notification_type
+  SET @notification_type = CONCAT(@commentedUserName, ' commented on your post');
+
+ 
+
+  -- Insert a new row in the Notifications table
+  INSERT INTO Notifications (user_id, sender_id, notification_type)
+  SELECT p.user_id, @user_id, @notification_type
+  FROM posts.postTable AS p
+  WHERE p.post_id = @post_id;
+END;
+
+
+CREATE TRIGGER folowPostTrigger
+
+ON users.followTable
+
+AFTER INSERT
+
+AS
+
+BEGIN
+
+  SET NOCOUNT ON;
+
+ 
+
+  DECLARE @post_id INT;
+
+  DECLARE @following_id INT;
+
+ 
+
+  -- Retrieve the post ID
+
+  SELECT @post_id = post_id FROM inserted;
+
+ 
+
+  -- Get the follower user IDs and names
+
+  DECLARE @followings TABLE (following_id INT, followingName VARCHAR(255));
+
+  INSERT INTO @followings (following_id, followingName)
+
+  SELECT f.following_id, u.username
+
+  FROM Follow AS f
+
+  INNER JOIN Users AS u ON u.id = f.following_id
+
+  WHERE f.user_id = (SELECT user_id FROM Posts WHERE id = @post_id);
+
+ 
+
+  -- Insert notifications for each follower
+
+  INSERT INTO Notifications (user_id, sender_id, notification_type)
+
+  SELECT fu.following_id, (SELECT user_id FROM Posts WHERE id = @post_id), fu.followingName + ' has made a post'
+
+  FROM @followings AS fu;
+
+END;
+
+
+
+CREATE TRIGGER followUserTrigger
+
+ON users.followTable
+
+AFTER INSERT
+
+AS
+
+BEGIN
+
+  SET NOCOUNT ON;
+
+ 
+
+  DECLARE @following_id INT;
+
+  DECLARE @user_id INT;
+
+  DECLARE @notification_type VARCHAR(255);
+
+ 
+
+  -- Retrieve the follower user ID and followed user ID
+
+  SELECT @following_id = f.following_id, @user_id = f.user_id
+
+  FROM users.followTable AS f
+
+  WHERE f.id = (SELECT id FROM inserted);
+
+ 
+
+  -- Retrieve the name of the follower user
+
+  DECLARE @followingName VARCHAR(255);
+
+  SELECT @followingName = u.username
+
+  FROM users.userProfile AS u
+
+  WHERE u.id = @following_id;
+
+ 
+
+  -- Create a notification notification_type
+
+  SET @notification_type = CONCAT(@followingName, ' followed you');
+
+ 
+
+  -- Insert a new row in the Notifications table
+
+  INSERT INTO Notifications (user_id, sender_id, notification_type)
+
+  VALUES (@user_id, @following_id, @notification_type);
+
+END;
+
+---nbelow not implemented
+
+
+
+
+
+
+
+CREATE TRIGGER likePostTrigger
+
+ON posts.likeTable
+
+AFTER INSERT
+
+AS
+
+BEGIN
+
+  SET NOCOUNT ON;
+
+ 
+
+  DECLARE @likeduser_id INT;
+
+  DECLARE @postOwnerId INT;
+
+  DECLARE @notification_type VARCHAR(MAX);
+
+ 
+
+  -- Retrieve the liked user ID and post owner ID
+
+  SELECT @likeduser_id = l.user_id, @postOwnerId = p.user_id
+
+  FROM Likes AS l
+
+  INNER JOIN Posts AS p ON p.id = l.post_id
+
+  WHERE l.id = (SELECT id FROM inserted);
+
+ 
+
+  -- Retrieve the name of the person who liked the post
+
+  DECLARE @likedUserName VARCHAR(255);
+
+  SELECT @likedUserName = u.username
+
+  FROM Users AS u
+
+  WHERE u.id = @likeduser_id;
+
+ 
+
+  -- Create a notification notification_type
+
+  SET @notification_type = CONCAT(@likedUserName, ' liked your post');
+
+ 
+
+  -- Insert a new row in the Notifications table
+
+  INSERT INTO Notifications (user_id, sender_id, notification_type)
+
+  VALUES (@postOwnerId, @likeduser_id, @notification_type);
+
+END;
+
+

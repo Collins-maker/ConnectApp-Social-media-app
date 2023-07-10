@@ -69,37 +69,45 @@ async function updatePost(req, res){
                             .input('post_id', post.user_id)
                             .input('written_text', post.written_text)
                             .input('image_url',post.image_url)
+                            .input('video_url',post.video_url)
                             .execute('updatePost')
 
-                            console.log(results)
-
+                        
+const updatedPost =results.recordset;
  }
  res.status(200).json({
         success: true,
-        message: 'Posted successfully',
-        data: results.recordset[0], // Assuming the first record is the newly inserted one
+        message: 'Post updated successfully',
+        results: updatePost
       });
 }
 
 //get postby id
-async function getPostByID(req, res){
-    let post =req.params.post_id;
+async function getPostByID(req, res) {
+  let post_id = req.params.post_id;
+  let post; // Declare the post variable here
 
-    let sql = await mssql.connect(config);
-    if (sql.connected) {
-      let results =await sql.request()
-                            .input('post_id', post_id)
-                            .execute('getPostByID')
+  let sql = await mssql.connect(config);
+  if (sql.connected) {
+    let results = await sql.request()
+      .input('post_id', post_id)
+      .execute('getPostByID');
 
-                            console.log(results)
+    console.log(results);
+    post = results.recordset; // Assign the value to the post variable
+  }
 
- }
- res.status(200).json({success:true, message:'post fetched successfully'});
+  res.status(200).json({
+    success: true,
+    message: 'post fetched successfully',
+    results: post // Use the post variable here
+  });
 }
+
 
 //delete a post
 async function deletePost(req, res){
-    let post =req.params.post_id;
+    let post_id =req.params.post_id;
 
     let sql = await mssql.connect(config);
     if (sql.connected) {
@@ -107,7 +115,7 @@ async function deletePost(req, res){
                             .input('post_id', post_id)
                             .execute('deletePost')
 
-                            console.log(results)
+                            // console.log(results)
 
  }
  res.status(200).json({success:true, message:'post deleted successfully'});
@@ -125,7 +133,11 @@ async function getFeedPosts(req, res){
                             console.log(results)
 
  }
- res.status(200).json({success:true, message:'posts from friends fetched successfully'});
+ res.status(200).json({
+  success:true, 
+  message:'posts from friends fetched successfully',
+  results:post
+});
 }
 
 

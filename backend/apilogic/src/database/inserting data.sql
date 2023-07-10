@@ -21,13 +21,9 @@ VALUES
 
 INSERT INTO users.followTable (user_id, following_id)
 VALUES
-    (2,6),
-    (1,2),
-    (1,7),
-    (2,1),
-    (6,7),
-    (2,7);
-
+    (4,27),
+    (27,28),
+    (26,28);
 	SELECT * FROM users.followTable
 	--SELECT * FROM users.userProfile
 	
