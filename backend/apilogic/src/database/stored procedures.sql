@@ -304,3 +304,14 @@ END
 EXEC getAllPostComment 9;
 
 SELECT * FROM users.userProfile
+
+--replying to a comment
+CREATE OR ALTER PROCEDURE insertCommentReply
+@replied_by_id INT,
+@comment_id INT,
+@reply_text VARCHAR(1000)
+AS
+BEGIN
+INSERT INTO posts.repliesTable(replied_by_id,comment_id,reply_text)
+VALUES(@replied_by_id,@comment_id,@reply_text)
+END;
