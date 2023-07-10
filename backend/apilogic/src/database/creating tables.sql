@@ -81,12 +81,15 @@ CREATE TABLE posts.commentsTable(
 
 
 CREATE TABLE posts.repliesTable(
-    Reply_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-    Replied_by_id INT FOREIGN KEY REFERENCES users.userProfile(user_id),
+    reply_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    replied_by_id INT FOREIGN KEY REFERENCES users.userProfile(user_id),
     comment_id INT FOREIGN KEY REFERENCES posts.commentsTable(Comment_id)  ON DELETE CASCADE ON UPDATE CASCADE,
-    Reply_text VARCHAR(1000),
+    reply_text VARCHAR(1000),
     created_at DATETIME NOT NULL DEFAULT GETDATE()
 );
+
+SELECT * FROM posts.repliesTable
+DROP TABLE posts.repliesTable
 
 CREATE TABLE notifications.notificationTable(
     notify_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,

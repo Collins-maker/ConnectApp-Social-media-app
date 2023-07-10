@@ -44,7 +44,34 @@ async function insertComment(req,res){
        });
  }
 
+//replying to a post
+ async function replyComment(req,res){
+let reply = req.body;
+let sql = await mssql.connect(config);
+if (sql.connected) {
+  let results= await sql.request()
+                        .input('replied_by_id',reply.replied_by_id)
+                        .input("comment_id", reply.comment_id)
+                        .input("reply_text",reply.reply_text)
+                        .execute('insertCommentReply');
+  
+  res.json({
+    success: true,
+    message: 'your reply saved',
+  });
+  
+}else{
+  res.status(500).json({
+    success: false,
+    message: 'Failed to connect to the database'
+  });
+}
+
+ }
+
+ 
 
 
 
-module.exports = {likePost,insertComment};
+
+module.exports = {likePost,insertComment, replyComment};
