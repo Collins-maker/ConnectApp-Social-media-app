@@ -102,6 +102,56 @@ BEGIN
 END;
 GO
 
+
+----new bwgining
+
+
+--notifcations trigger,
+--notifying after comment:
+CREATE TRIGGER commentPostTrigger
+ON posts.commentsTable
+AFTER INSERT
+AS
+BEGIN
+  SET NOCOUNT ON;
+
+  -- Declare variables for user ID, post ID, sender ID, and notification type
+  DECLARE @user_id INT;
+  DECLARE @post_id INT;
+  DECLARE @sender_id INT;
+  DECLARE @notification_type VARCHAR(MAX);
+
+  -- Retrieve the commented user ID and post ID from the inserted table
+  SELECT @user_id = user_id, @post_id = post_id
+  FROM inserted;
+
+  -- Retrieve the name of the commented user
+  DECLARE @commentedUserName VARCHAR(255);
+  SELECT @commentedUserName = u.username
+  FROM users.userProfile AS u
+  WHERE u.user_id = @user_id;
+
+  -- Get the user ID of the post owner from the posts table
+  DECLARE @post_user_id INT;
+  SELECT @post_user_id = user_id
+  FROM posts.postTable
+  WHERE post_id = @post_id;
+
+  -- Get the sender ID from the user's table (replace with your actual sender ID retrieval logic)
+  SET @sender_id = @user_id;
+
+  -- Create a notification type
+  SET @notification_type = CONCAT(@commentedUserName, ' commented on your post');
+
+  -- Insert the notification into the notifications table
+  INSERT INTO notifications.notificationTable(user_id, post_id, sender_id, notification_type)
+  VALUES (@post_user_id, @post_id, @sender_id, @notification_type);
+END;
+
+
+
+
+
 --notifications triggers
 CREATE TRIGGER commentPostTrigger
 ON posts.commentsTable

@@ -315,3 +315,8 @@ BEGIN
 INSERT INTO posts.repliesTable(replied_by_id,comment_id,reply_text)
 VALUES(@replied_by_id,@comment_id,@reply_text)
 END;
+
+SELECT * FROM posts.commentsTable
+SELECT * FROM posts.repliesTable
+
+EXEC insertCommentReply 4,5, 'Baraka Childrens Home'
