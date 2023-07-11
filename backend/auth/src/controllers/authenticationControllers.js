@@ -109,7 +109,9 @@ async function loginUser(req, res) {
           let passwords_match = await bcrypt.compare(password, user.password);
           if (passwords_match) {
 
-            req.session.user =username;
+            req.session.authorized =true;
+            req.session.user =user;
+            
 
             res.json({ sucess: true, message: "logged in successfully" });
           } else {

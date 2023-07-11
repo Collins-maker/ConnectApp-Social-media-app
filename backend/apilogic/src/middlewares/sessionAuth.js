@@ -30,6 +30,7 @@ async function sessionAuth(req, res, next) {
       // Session is valid and authorized
       console.log(json_session);
       req.session = json_session;
+      
       next(); // Proceed to the next middleware or route handler
     } else {
       // Session is invalid or unauthorized

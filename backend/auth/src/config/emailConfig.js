@@ -11,7 +11,7 @@ const email_config= {
 
     auth: {
 
-        user: process.env.EMAIL_USER,
+        user: process.env.USER_EMAIL,
 
         pass: process.env.PWD
 

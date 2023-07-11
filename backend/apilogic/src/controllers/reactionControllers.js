@@ -22,12 +22,13 @@ async function likePost(req,res){
 
 async function insertComment(req,res){
     let comment =req.body;
+    const user_id = req.session?.user.user_id;
     let commentPost;
  
      let sql = await mssql.connect(config);
      if (sql.connected) {
        let results =await sql.request()
-                            .input('user_id', comment.user_id)  
+                            .input('user_id', user_id)  
                              .input('post_id', comment.post_id)
                              .input('comment_text', comment.comment_text)
                              .execute('insertComment')
@@ -47,10 +48,11 @@ async function insertComment(req,res){
 //replying to a post
  async function replyComment(req,res){
 let reply = req.body;
+const replied_by_id =req.session?.user_id;
 let sql = await mssql.connect(config);
 if (sql.connected) {
   let results= await sql.request()
-                        .input('replied_by_id',reply.replied_by_id)
+                        .input('replied_by_id',replied_by_id)
                         .input("comment_id", reply.comment_id)
                         .input("reply_text",reply.reply_text)
                         .execute('insertCommentReply');
