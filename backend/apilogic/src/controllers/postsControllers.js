@@ -4,10 +4,10 @@ const config = require('../config/config');
  
  async function getAllPosts(req,res){
 
-    let sql =await mssql.connect(config);
+  let pool = req.pool;
 
-    if(sql.connected ){
-        let results = await sql.request().execute('getAllPosts')
+    if(pool.connected ){
+        let results = await pool.request().execute('getAllPosts')
       //   query('SELECT * from posts.postsTable');
 
        let posts = results.recordset;
@@ -23,9 +23,9 @@ const config = require('../config/config');
 
  async function getUserPosts(req,res) {
    let user_id =req.params.user_id
-   let sql = await mssql.connect(config)
-   if (sql.connected) {
-      let results =await sql.request()
+   let pool = req.pool;
+   if (pool.connected) {
+      let results =await pool.request()
                            .input('user_id',user_id)
                            .execute('getUserPosts');
       // query(`select * from posts.userProfile where user_id = '${user_id}'`);
@@ -44,9 +44,9 @@ const config = require('../config/config');
  async function insertPost(req, res){
     let post =req.body;
 
-    let sql = await mssql.connect(config);
-    if (sql.connected) {
-      let results =await sql.request()
+    let pool = req.pool;
+    if (pool.connected) {
+      let results =await pool.request()
                             .input('user_id', post.user_id)
                             .input('written_text', post.written_text)
                             .input('image_url',post.image_url)
@@ -63,9 +63,9 @@ const config = require('../config/config');
 async function updatePost(req, res){
     let post =req.body;
 
-    let sql = await mssql.connect(config);
-    if (sql.connected) {
-      let results =await sql.request()
+    let pool = req.pool;
+    if (pool.connected) {
+      let results =await pool.request()
                             .input('post_id', post.user_id)
                             .input('written_text', post.written_text)
                             .input('image_url',post.image_url)
@@ -87,9 +87,9 @@ async function getPostByID(req, res) {
   let post_id = req.params.post_id;
   let post; // Declare the post variable here
 
-  let sql = await mssql.connect(config);
-  if (sql.connected) {
-    let results = await sql.request()
+  let pool = req.pool;
+  if (pool.connected) {
+    let results = await pool.request()
       .input('post_id', post_id)
       .execute('getPostByID');
 
@@ -109,9 +109,9 @@ async function getPostByID(req, res) {
 async function deletePost(req, res){
     let post_id =req.params.post_id;
 
-    let sql = await mssql.connect(config);
-    if (sql.connected) {
-      let results =await sql.request()
+    let pool = req.pool;
+    if (pool.connected) {
+      let results =await pool.request()
                             .input('post_id', post_id)
                             .execute('deletePost')
 
@@ -124,9 +124,9 @@ async function deletePost(req, res){
 async function getFeedPosts(req, res){
     let post =req.params.user_id;
 
-    let sql = await mssql.connect(config);
-    if (sql.connected) {
-      let results =await sql.request()
+    let pool = req.pool;
+    if (pool.connected) {
+      let results =await pool.request()
                             .input('user_id', user_id)
                             .execute('getFeedPosts')
 

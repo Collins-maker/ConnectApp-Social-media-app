@@ -1,7 +1,10 @@
 const express = require('express');
+const{sessionAuth} =require('../middlewares/sessionAuth');
 const {likePost, insertComment, replyComment} = require('../controllers/reactionControllers')
 
 const reactionRoutes = express.Router();
+
+reactionRoutes.use(sessionAuth);
 
 reactionRoutes.post('/like', likePost);
 
