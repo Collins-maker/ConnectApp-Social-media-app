@@ -89,17 +89,18 @@ CREATE TABLE posts.repliesTable(
 );
 
 SELECT * FROM posts.repliesTable
-DROP TABLE posts.repliesTable
+
 
 CREATE TABLE notifications.notificationTable(
     notify_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
     user_id INT FOREIGN KEY REFERENCES users.userProfile(user_id)  ON DELETE CASCADE ON UPDATE CASCADE,
-    notification_type VARCHAR(255),
+    notification_type VARCHAR(MAX),
     post_id INT FOREIGN KEY REFERENCES posts.postTable(post_id),
     sender_id INT FOREIGN KEY REFERENCES users.userProfile(user_id),
     is_read BIT,
     created_at DATETIME NOT NULL DEFAULT GETDATE()
 );
+
 
 --not implemented
 
