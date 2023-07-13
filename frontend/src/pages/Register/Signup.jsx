@@ -8,7 +8,7 @@ function Signup() {
   const [first_name, setfirst_name] = useState("");
   const [last_name, setlast_name] = useState("");
   const [username, setusername] = useState("");
-  const [email_adress, setemail_adress] = useState("");
+  const [email_address, setemail_address] = useState("");
   const [password, setpassword] = useState("");
   const [confirm_password, setconfirm_password] = useState("");
 
@@ -21,7 +21,7 @@ function Signup() {
       first_name,
       last_name,
       username,
-      email_adress,
+      email_address,
       password,
       confirm_password,
     };
@@ -38,7 +38,7 @@ function Signup() {
   return (
     <div className="form-container">
       <form action="" onSubmit={handleSubmit}>
-        <h2>Join Connect App Today!</h2>
+        <h2>Get Connect Account Today!</h2>
 
         <div className="label">
           <label htmlFor="first_name">
@@ -75,15 +75,15 @@ function Signup() {
               onChange={(e) => setusername(e.target.value)}
             />
 
-            <label htmlFor="email_adress">
+            <label htmlFor="email_address">
               Email Adress<span className="required">*</span>
             </label>
             <input
               type="text"
               placeholder="abc@gmail.com"
-              value={email_adress}
+              value={email_address}
               required
-              onChange={(e) => setemail_adress(e.target.value)}
+              onChange={(e) => setemail_address(e.target.value)}
             />
 
             <label htmlFor="password">
