@@ -14,7 +14,7 @@ CREATE TABLE users.userProfile(
    gender VARCHAR(30),
    email_address VARCHAR(50) UNIQUE,
    country VARCHAR(255),
-   phone_number VARCHAR(255) NOT NULL,
+   phone_number VARCHAR(50),
    date_of_birth VARCHAR(255) NOT NULL,
    registration_date DATETIME NOT NULL DEFAULT GETDATE(),
    image_url VARCHAR(1000),
@@ -26,6 +26,9 @@ CREATE TABLE users.userProfile(
    password VARCHAR (100) NOT NULL,
    is_deleted BIT NOT NULL DEFAULT 0
 );
+
+--ALTER TABLE users.userProfile
+--ALTER COLUMN phone_number VARCHAR(50);
 
 
 
@@ -100,6 +103,7 @@ CREATE TABLE notifications.notificationTable(
     is_read BIT,
     created_at DATETIME NOT NULL DEFAULT GETDATE()
 );
+
 
 
 --not implemented

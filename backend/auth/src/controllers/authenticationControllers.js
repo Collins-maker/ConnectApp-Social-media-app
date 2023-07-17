@@ -4,27 +4,25 @@ const bcrypt = require("bcrypt");
 const authorize = require("../middlewares/session");
 const markup = require('../utils/markup')
 const sendMail = require('../utils/sendMail')
+require("dotenv").config()
 
 
 //signup user 
 
  async function registerUser(req,res){
     let user = req.body;
-  //   res.json(user)
+    
 
     let hashed_pwd= await bcrypt.hash(user.password, 8);
 
     let sql = await mssql.connect(config);
     if (sql.connected) {
+      
       let results =await sql.request()
                       .input('first_name', user.first_name)
                       .input('last_name', user.last_name)
                       .input('username', user.username)
-                      .input('gender', user.gender)
-                      .input('email', user.email_address)
-                      .input('country', user.country) 
-                      .input('phone_number',user.phone_number)
-                      .input('date_of_birth', user.date_of_birth)
+                      .input('email_adress', user.email_address)
                       .input('password', hashed_pwd)
                       .execute('insertUser')
 
@@ -43,13 +41,11 @@ const sendMail = require('../utils/sendMail')
                         });
             
             
-            
-            
                         const message_options = {
             
                             to: user.email_address,
             
-                            from: process.env.EMAIL_USER,
+                            from: process.env.USER_EMAIL,
             
                             subject: 'Registration to Connect Social Media',
             
@@ -59,10 +55,10 @@ const sendMail = require('../utils/sendMail')
             
             
             
-            
+            console.log(user);
                         await sendMail(message_options);
             
-                        console.log(results);
+                        
             
             
             
