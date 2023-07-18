@@ -73,6 +73,7 @@
 .topbarIconBadge{
     margin-right: 15px;
     height: 15px;
+    width: 15px;
     background-color: red;
     color: white;
     border-radius: 50%;
@@ -82,6 +83,7 @@
     align-items: center;
     display: flex;
     font-size: 12px;
+    align-items: center;
 
 }
 

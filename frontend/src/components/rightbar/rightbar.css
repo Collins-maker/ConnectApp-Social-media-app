@@ -1,5 +1,5 @@
 .rightbar{
-    flex: 4;
+    flex: 3.5;
 }
 
 .rightbarWrapper{
@@ -30,5 +30,48 @@
     padding: 0; 
     margin: 0;
     list-style: none;
+}
+
+.rightbarTitle{
+    font-size: 18;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.rightbarInfo{
+    margin-bottom: 30px;
+}
+
+.rightbarInfoitem{
+    margin-bottom: 10px;
+}
+
+.rightbarInfoKey{
+    font-weight: 500;
+    margin-right: 15px;
+    color: #555;
+}
+
+.rightbarInfoValue{
+    font-weight: 300;
+}
+
+.rightbarFollowings{
+    display: flex; 
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.rightbarFollowing{
+   display: flex;
+   flex-direction: column; 
+   margin-bottom: 20px;
+   cursor: pointer;
+}
+
+.rightbarFollowingImg{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
 }
 
