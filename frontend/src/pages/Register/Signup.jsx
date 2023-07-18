@@ -38,7 +38,8 @@ function Signup() {
   return (
     <div className="form-container">
       <form action="" onSubmit={handleSubmit}>
-        <h2>Get Connect Account Today!</h2>
+        <h2>Sign Up</h2>
+        <h6>It's Quick and Easy!</h6>
 
         <div className="label">
           <label htmlFor="first_name">
@@ -108,10 +109,10 @@ function Signup() {
               onChange={(e) => setconfirm_password(e.target.value)}
             />
           </div>
-          <p>
+          {/* <p>
             Make sure it's at least 8 characters including a number and a
             lowercase letter. <a href="#">Learn more.</a>
-          </p>
+          </p> */}
 
           <button>Register</button>
           <p>

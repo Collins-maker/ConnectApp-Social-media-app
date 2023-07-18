@@ -24,7 +24,7 @@ export default function Profile() {
           </div>
           <div className="profileRightBottom">
             <Feeds />
-            <Rightbar profile/>
+            <Rightbar isProfilePage={true}/>
           </div>
         </div>
       </div>

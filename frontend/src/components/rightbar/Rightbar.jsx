@@ -2,7 +2,7 @@ import Online from "../online/Online";
 import "./rightbar.css";
 import { Users } from "../../dummyData";
 
-function Rightbar({ profile }) {
+function Rightbar({ isProfilePage }) {
   const HomeRightbar = () => {
     return (
       <>
@@ -81,7 +81,7 @@ function Rightbar({ profile }) {
   return (
     <div className="rightbar">
       <div className="rightbarWrapper">
-        <ProfileRightbar />
+        {isProfilePage? <ProfileRightbar/> : <HomeRightbar/>}
       </div>
     </div>
   );

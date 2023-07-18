@@ -16,7 +16,7 @@ function Home() {
    <div className="homeContainer">
     <Sidebar/>
     <Feeds/>
-    <Rightbar/>
+    <Rightbar isProfilePage={false}/>
    </div>
    
       

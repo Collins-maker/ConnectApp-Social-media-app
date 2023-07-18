@@ -35,8 +35,10 @@ function Login() {
   return (
     <div className="form-container">
       <form action="" onSubmit={handleSubmit}>
-      {/* <h6>Have no account in Our Library?<Link to='/signup'>Register</Link> </h6> */}
-      <h2>Login to Connect App</h2>
+      
+      <h2>Login</h2>
+
+
 
       <div className="label">
        
@@ -62,11 +64,8 @@ function Login() {
       </p>
       
       <button>Login</button>
-      <p>
-        By creating an account you agree to the <a href="#">Terms of Service</a>. For more information about Library
-        privacy practices, see the <a href="#">Library Privacy Statement</a>. We'll occasionally send you an account
-        related usernames
-      </p>
+      
+      <h6>Have no account account Yet?<Link to='/signup'>Register</Link> </h6>
       </form>
     </div>
   );
