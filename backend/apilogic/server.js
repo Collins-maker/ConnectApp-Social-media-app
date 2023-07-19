@@ -1,39 +1,63 @@
 const express = require("express");
-const RedisStore = require("connect-redis").default
+const RedisStore = require("connect-redis").default;
 const {createClient} = require("redis");
 const sql = require("mssql");
 const config = require("./src/config/config");
-
-require("dotenv").config();
-
-const app = express();
-
 const userRoutes = require('./src/routes/userRoutes');
 const postRoutes = require('./src/routes/postRoutes');
 const reactionRoutes = require('./src/routes/reactionsRoutes');
 
+const cors = require('cors')
+require("dotenv").config();
+
+const app = express();
+
 app.use(express.json());
 
-const pool  = new sql.ConnectionPool(config)
+app.use(cors({
+  origin:'http://localhost:3000', 
+  credentials:true,       
+  optionSuccessStatus:200
+}))
+
+
+
+
 async function startApp() {
   try {
+    const pool  = await sql.connect(config)
     await pool.connect();
     console.log("App connected to database");
 
+    app.use((req, res, next) => {
+      req.pool = pool; next()
+    })
 
-    app.use((req, res, next) => {req.pool = pool;next();});
+    const redisClient = createClient();
+    redisClient.connect()
+    console.log("connected to redis")
 
-    // app.use((req, res, next)=>{
-    //   const cookie = req.headers.cookie;
-    //   let SessionId = 
-    //   if
-    //   req.secure
-    //   console.log(cookie)
-    // })
+    const redisStore = new RedisStore({
+      client: redisClient,
+      prefix: ''
+    })
 
-app.get("/", (req, res) => {
-  res.send("Hello, Welcome to my ConnectApp");
-});
+app.use(async(req,res,next)=>{
+  let cookie = req.headers['cookie']
+  if (cookie && typeof cookie === 'string') {
+    let sessionID = cookie.substring(16, 52);
+    let session = await redisClient.get(sessionID);
+
+    if (session) {
+      let real_session = JSON.parse(session);
+      next();
+    }}else{
+    res.status(403).json({
+      success: false,
+      message: "login to proceed"
+    })
+  }
+})
 
 app.use(userRoutes);
 

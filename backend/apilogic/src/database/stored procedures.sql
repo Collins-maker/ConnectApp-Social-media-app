@@ -191,9 +191,12 @@ END;
 CREATE OR ALTER PROCEDURE getAllPosts
 AS
 BEGIN
-SELECT * FROM  posts.postTable
-WHERE is_deleted = 0
+    SELECT p.*, u.profile_image, u.username
+    FROM posts.postTable p
+    JOIN users.userProfile u ON p.user_id = u.user_id
+    WHERE p.is_deleted = 0;
 END;
+
 
 -- Get user posts
 CREATE OR ALTER PROCEDURE getUserPosts

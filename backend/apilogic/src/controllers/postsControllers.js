@@ -10,7 +10,7 @@ const config = require('../config/config');
         let results = await pool.request().execute('getAllPosts')
       //   query('SELECT * from posts.postsTable');
 
-       let posts = results.recordset;
+       let posts = results.recordset;0
        res.json({
         success: true,
         message:"fetched products successfully",

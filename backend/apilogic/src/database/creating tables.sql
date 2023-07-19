@@ -51,12 +51,17 @@ CREATE TABLE posts.postTable(
     post_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
     user_id INT FOREIGN KEY REFERENCES users.userProfile(user_id),
     written_text VARCHAR (1000),
-    image_url VARCHAR(255),
-    video_url VARCHAR(255),
+    profile_image VARCHAR(1000),
+    video_url VARCHAR(1000),
     like_count VARCHAR(255),
     Comment_count VARCHAR(255),
     created_at DATETIME NOT NULL DEFAULT GETDATE()
 );
+
+
+
+
+
 
 
 CREATE TABLE posts.likeTable(

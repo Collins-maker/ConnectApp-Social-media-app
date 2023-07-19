@@ -18,6 +18,7 @@ require("dotenv").config()
     let sql = await mssql.connect(config);
     if (sql.connected) {
       
+      
       let results =await sql.request()
                       .input('first_name', user.first_name)
                       .input('last_name', user.last_name)
@@ -107,6 +108,7 @@ async function loginUser(req, res) {
 
             req.session.authorized =true;
             req.session.user =user;
+            console.log('some')
             
 
             res.json({ sucess: true, message: "logged in successfully" });

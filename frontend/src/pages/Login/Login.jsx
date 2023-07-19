@@ -18,13 +18,12 @@ function Login() {
   
     if (password && username) {
       try {
-        const response = await axios.post('http://localhost:4000/login', values);
+        const response = await axios.post('http://localhost:4000/login', values, {
+          withCredentials: true
+        })
         // const token = response.data.token;
-  
-  
-        
-  
-        navigate('/');
+
+        navigate('/home');
       } catch (error) {
         console.error('An error occurred during login:', error);
       }
