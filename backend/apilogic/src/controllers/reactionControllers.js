@@ -4,20 +4,31 @@ const config = require('../config/config');
 async function likePost(req,res){
    let like =req.body;
 
-    let sql = await mssql.connect(config);
-    if (sql.connected) {
-      let results =await sql.request()  
-                            .input('post_id', like.post_id)
-                            .input('user_id', like.user_id)
-                            .execute('posts.likePost')
+   const user_id = req.session?.user.user_id;
+try {
+  let pool = req.pool;
+  if (pool.connected) {
+    let results =await pool.request() 
+                           .input('post_id', like.post_id)
+                           .input('user_id', user_id)
+                           .execute('posts.likePost')
 
-                            console.log(results)
+                           console.log(results)
 
- }
- res.status(200).json({
-        success: true,
-        message: 'Post liked successfully'
-      });
+}
+res.status(200).json({
+       success: true,
+       message: 'Post liked successfully'
+     });
+
+} catch (error) {
+  console.error("Error liking post:", error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while liking the post",
+    });
+}
+  
 }
 
 async function insertComment(req,res){

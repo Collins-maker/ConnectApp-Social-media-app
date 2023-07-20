@@ -17,7 +17,7 @@ CREATE TABLE users.userProfile(
    phone_number VARCHAR(50),
    date_of_birth VARCHAR(255) NOT NULL,
    registration_date DATETIME NOT NULL DEFAULT GETDATE(),
-   image_url VARCHAR(1000),
+   profile_image VARCHAR(1000),
    bio_data VARCHAR(MAX),
    age AS (DATEDIFF(YEAR, date_of_birth, GETDATE())),
    followers INT,
@@ -51,12 +51,14 @@ CREATE TABLE posts.postTable(
     post_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
     user_id INT FOREIGN KEY REFERENCES users.userProfile(user_id),
     written_text VARCHAR (1000),
-    profile_image VARCHAR(1000),
+    image_url VARCHAR(1000),
     video_url VARCHAR(1000),
     like_count VARCHAR(255),
     Comment_count VARCHAR(255),
     created_at DATETIME NOT NULL DEFAULT GETDATE()
 );
+
+select * from posts.postTable
 
 
 

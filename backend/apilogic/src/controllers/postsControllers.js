@@ -43,14 +43,15 @@ const config = require('../config/config');
 
  async function insertPost(req, res){
     let post =req.body;
+    const user_id = req.session?.user.user_id;
 
     let pool = req.pool;
     if (pool.connected) {
       let results =await pool.request()
-                            .input('user_id', post.user_id)
+                            .input('user_id',user_id)
                             .input('written_text', post.written_text)
-                            .input('image_url',post.image_url)
-                            .input('video_url',post.video_url)
+                            .input('media_url',post.media_url)
+                            .input('media_type',post.media_type)
                             .execute('insertPost')
 
                             console.log(results)
@@ -62,14 +63,15 @@ const config = require('../config/config');
 //update posts
 async function updatePost(req, res){
     let post =req.body;
+    const user_id = req.session?.user.user_id;
 
     let pool = req.pool;
     if (pool.connected) {
       let results =await pool.request()
-                            .input('post_id', post.user_id)
+                            .input('post_id', user_id)
                             .input('written_text', post.written_text)
-                            .input('image_url',post.image_url)
-                            .input('video_url',post.video_url)
+                            .input('media_url',post.media_url)
+                            .input('media_type',post.media_type)
                             .execute('updatePost')
 
                         

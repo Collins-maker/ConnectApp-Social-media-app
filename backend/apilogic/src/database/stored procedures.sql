@@ -127,20 +127,23 @@ INSERT INTO  users.followTable(user_id,following_id)
 
 SELECT * FROM users.followTable
 
---POST  PROCEDURES
+--POST  PROCEDURES...
+
+
+-- Insert Post
 -- Insert Post
 CREATE OR ALTER PROCEDURE insertPost
     @user_id INT,
     @written_text VARCHAR(255),
-    @image_url VARCHAR(255),
-    @video_url VARCHAR(255)
+    @media_url VARCHAR(255),
+    @media_type VARCHAR(255)
 AS
 BEGIN
 DECLARE @post_id INT;
 
  SELECT @post_id = ISNULL(MAX(post_id),0)+ 1 FROM posts.postTable;
-    INSERT INTO posts.postTable (user_id, written_text, image_url, video_url)
-    VALUES (@user_id, @written_text, @image_url, @video_url);
+    INSERT INTO posts.postTable (user_id, written_text, media_url, media_type)
+    VALUES (@user_id, @written_text, @media_url, @media_type);
 END;
 
 select * from posts.postTable;
@@ -148,13 +151,13 @@ select * from posts.postTable;
 -- Update Post
 CREATE OR ALTER PROCEDURE updatePost
     @post_id INT,
-    @written_text VARCHAR(255),
-    @image_url VARCHAR(255),
-    @video_url VARCHAR(255)
+    @written_text VARCHAR(1000),
+    @media_url VARCHAR(1000),
+    @media_type VARCHAR(1000)
 AS
 BEGIN
     UPDATE posts.postTable
-    SET written_text = @written_text, image_url = @image_url, video_url = @video_url
+    SET written_text = @written_text, media_url = @media_url, media_type = @media_type
     WHERE post_id = @post_id;
 END;
 

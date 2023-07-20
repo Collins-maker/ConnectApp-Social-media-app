@@ -108,7 +108,7 @@ GO
 
 --notifcations trigger,
 --notifying after comment:
-CREATE TRIGGER commentPostTrigger
+CREATE  OR ALTER TRIGGER commentPostTrigger
 ON posts.commentsTable
 AFTER INSERT
 AS
@@ -153,7 +153,7 @@ END;
 
 
 --notifications triggers
-CREATE TRIGGER commentPostTrigger
+CREATE OR ALTER TRIGGER commentPostTrigger
 ON posts.commentsTable
 AFTER INSERT
 AS
