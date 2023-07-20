@@ -305,7 +305,10 @@ SELECT * from posts.commentsTable
 WHERE post_id = @post_id
 END
 
-EXEC getAllPostComment 9;
+--EXEC getAllPostComment 40;
+
+--SELECT * FROM posts.postTable
+--SELECT * FROM posts.CommentTable
 
 SELECT * FROM users.userProfile
 

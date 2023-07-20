@@ -56,6 +56,28 @@ async function insertComment(req,res){
        });
  }
 
+
+ async function getAllPostComments(req, res) {
+  let post_id = req.params.post_id;
+   // Declare the post variable here
+
+  let pool = req.pool;
+  if (pool.connected) {
+    let results = await pool.request()
+      .input('post_id', post_id)
+      .execute('getAllPostComment');
+
+    console.log(results);
+    post = results.recordset; // Assign the value to the post variable
+  }
+
+  res.status(200).json({
+    success: true,
+    message: 'post comments fetched successfully',
+    results: post // Use the post variable here
+  });
+}
+
 //replying to a post
  async function replyComment(req,res){
 let reply = req.body;
@@ -87,4 +109,4 @@ if (sql.connected) {
 
 
 
-module.exports = {likePost,insertComment, replyComment};
+module.exports = {likePost,insertComment, replyComment, getAllPostComments};
