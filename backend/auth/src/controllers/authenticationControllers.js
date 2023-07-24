@@ -124,6 +124,31 @@ async function loginUser(req, res) {
     }
   }
 
-  module.exports={ registerUser, loginUser}
+  async function updateUserProfile(req,res) {
+    let user = req.body;
+    const user_id = req.session?.user.user_id;
+
+    let pool = req.pool;
+    if (pool.connected) {
+      let results =await pool.request()
+                              .input('gender', user.gender)
+                              .input('country', user.country)
+                              .input('phone_number',user.phone_number)
+                              .input('date_of_birth', date_of_birth)
+                              .input('profile_image', user.profileImg)
+                              .input('bio_data', user.bio_data)
+                              .execute('updateUser')
+
+
+                              res.status(200).json({
+                                success: true,
+                                message: 'Post updated successfully',
+                                results: updatePost
+                              });
+
+  }
+}
+
+  module.exports={ registerUser, loginUser, updateUserProfile}
 
 

@@ -39,8 +39,56 @@ const config = require('../config/config');
    }
  }
 
+ async function getUsersByUserId(req,res) {
+  const user_id = req.session?.user.user_id;
+  let sql = await mssql.connect(config)
+  if (sql.connected) {
+     let results =await sql.request()
+                          .input('user_id',user_id)
+                          .execute('getUserByUserId');
+     // query(`select * from users.userProfile where username = '${username}'`);
+     let user =results.recordset[0]; 
+     res.json({
+        success:true,
+        message: 'user feltched successfully',
+        results:user
+     })
+     
+  }
+}
+
+async function followUser(req,res){
+  let follow =req.body;
+
+  const following_id = req.session?.user.user_id;
+try {
+ let pool = req.pool;
+ if (pool.connected) {
+   let results =await pool.request() 
+                          .input('user_id', )
+                          .input('following_id', following_id)
+                          .execute('posts.likePost')
+
+                          console.log(results)
+
+}
+res.status(200).json({
+      success: true,
+      message: `You have followed ${user_id}`
+    });
+
+} catch (error) {
+ console.error("Error lfollowing:", error);
+   res.status(500).json({
+     success: false,
+     message: "An error occurred while following user",
+   });
+}
+ 
+}
+
  async function getUsersFollowers(req, res) {
-   let user_id = req.params.user_id;
+  const user_id = req.session?.user.user_id;
    let users;
  
    try {
@@ -73,4 +121,4 @@ const config = require('../config/config');
  
 
 
- module.exports ={getAllUsers, getUsersByUsername, getUsersFollowers}
+ module.exports ={getAllUsers, getUsersByUsername, getUsersFollowers, getUsersByUserId}

@@ -7,27 +7,58 @@ function Login() {
   const [username,setUsername]=useState('')
   const [password,setPassword]=useState('')
 
+  const [uError,setuError] = useState();
+
+  const [pError,setPerror] = useState();
+
   const navigate =useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
   
     const values = {
-      username,
-      password
+      username: username,
+      password: password
     };
-  
-    if (password && username) {
+ 
       try {
-        const response = await axios.post('http://localhost:4000/login', values, {
+         const response = await axios.post('http://localhost:4000/login', values, {
           withCredentials: true
         })
+        .then(res=>{
+          
+          navigate('/home')
+        })
+        
         // const token = response.data.token;
-
-        navigate('/home');
       } catch (error) {
-        console.error('An error occurred during login:', error);
+        console.log(error)
+        console.log(error.response.data.message);
+
+        
+        if(error.response.data.message ==='no user found' && error.response.data.message !=='Wrong password'){
+          setuError(error.response.data.message)
+          setPerror('')
+        }else if(error.response.data.message !== 'no user found' && error.response.data.messagee === 'Wrong Password'){
+
+          setPerror(error.response.data.message)
+    
+          setuError('')
+    
+        }
+    
+        else{
+    
+         
+    
+        console.log(error.response.data.message)
+        }
+    
+       
+    
       }
-    }
+    
+    
+    
   };
   
 
@@ -49,6 +80,7 @@ function Login() {
         value={username}
         required
         onChange={e=>setUsername(e.target.value)}/>
+        <p style={{color:"red"}}>{uError}</p>
         <label htmlFor="password">
           password<span className="required">*</span>
         </label>
@@ -56,6 +88,7 @@ function Login() {
         value={password}
         required
         onChange={e=>setPassword(e.target.value)} />
+        <p style={{color:"red"}}>{pError}</p>
         
       </div>
       <p>

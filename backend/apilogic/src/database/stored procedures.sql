@@ -46,15 +46,18 @@ END;
 
 -- Update user
 CREATE OR ALTER PROCEDURE updateUser
-    @first_name VARCHAR(50),
-    @last_name VARCHAR(255),
-    @username VARCHAR(255),
-    @email VARCHAR(50)
+	@user_id INT,
+    @gender VARCHAR(30),
+    @country VARCHAR(255),
+    @phone_number VARCHAR(255),
+    @date_of_birth VARCHAR(255),
+    @profile_image VARCHAR(1000),
+    @bio_data VARCHAR(MAX)
 AS
 BEGIN
     UPDATE users.userProfile
-    SET first_name = @first_name,last_name=@last_name,email_address = @email
-    WHERE username = @username;
+    SET gender = @gender,country=@country,phone_number=@phone_number,date_of_birth=@date_of_birth,profile_image=@profile_image,bio_data=@bio_data
+    WHERE user_id= @user_id;
 END;
 
 -- Delete user

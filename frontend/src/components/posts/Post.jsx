@@ -2,11 +2,14 @@ import "./post.css";
 import { MoreVert } from "@mui/icons-material";
 import { useState } from "react";
 import axios from "axios";
+import PostPopup from "../popups/PostPopUp";
 
-function Post({ post }) {
+
+function Post({ post, onClick}) {
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
 
+  const [showPostPopup, setShowPostPopup] = useState(false);
   const commentHandler = async (post_id) => {
     try {
       // Fetch comments for the post from the backend
@@ -47,14 +50,20 @@ function Post({ post }) {
   };
 
   const isImage = post.media_type && post.media_type.startsWith("image");
-  const mediaUrl = isImage ? post.media_url : post.mediaUrl; // Use media_type as image URL if it's not a valid Cloudinary UR
+  const media_url = isImage ? post.media_url : post.media_url; // Use media_type as image URL if it's not a valid Cloudinary UR
+
+
 
   return (
-    <div className="post">
-      <div className="postWrapper">
+    <div className="post"    >
+
+
+    {/* Render the post content as usual */}
+    {/* ... */}
+      <div className="postWrapper" >
         <div className="postTop">
           <div className="postTopLeft">
-            <img className="postProfileImg" src={post.profile_image} alt="" />
+            <img className="postProfileImg" src={post.profile_image}  alt="" />
             <span className="postUsername">{post.username}</span>
             <span className="postDate">{post.created_at}</span>
           </div>
@@ -62,9 +71,9 @@ function Post({ post }) {
             <MoreVert />
           </div>
         </div>
-        <div className="postCenter">
+        <div className="postCenter" onClick={()=>setShowPostPopup(true) }>
           <span className="postText">{post.written_text}</span>
-          <img className="postImg" src={mediaUrl} alt="" />
+          <img className="postImg" src={media_url} alt="" />
         </div>
         <div className="postBottom">
           <div className="postBottomLeft">
@@ -104,8 +113,15 @@ function Post({ post }) {
             </ul>
           </div>
         )}
-        
+
       </div>
+      {showPostPopup && (
+        <PostPopup
+          post={post}
+          onClose={() => setShowPostPopup(false)}
+        /> // Conditionally render the PostPopup component
+      )}
+
     </div>
   );
 }

@@ -40,6 +40,9 @@ END;
 
 
 
+
+
+
 CREATE OR ALTER TRIGGER posts.updateComments
 ON posts.commentsTable
 AFTER INSERT, DELETE 
