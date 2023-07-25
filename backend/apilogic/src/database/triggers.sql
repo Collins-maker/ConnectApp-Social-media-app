@@ -40,23 +40,10 @@ END;
 
 
 
-CREATE OR ALTER TRIGGER posts.updateComments
-ON posts.commentsTable
-AFTER INSERT, DELETE 
-AS
-BEGIN
-    -- Update the like count for the post
-    SET NOCOUNT ON
-    UPDATE posts.postTable
-    SET Comment_Count = (
-	SELECT COUNT(*) 
-	FROM posts.CommentsTable 
-	WHERE post_id = posts.postTable.post_id
-	);
-END;
 
 
-CREATE TRIGGER users.updateFollowerCount
+
+CREATE OR ALTER TRIGGER users.updateFollowerCount
 ON users.followTable
 AFTER INSERT, DELETE
 AS
@@ -71,12 +58,34 @@ BEGIN
 
     -- Update the following count for the user who is following
     UPDATE u
-    SET followings = (SELECT COUNT(*) FROM users.followTable WHERE user_id = u.user_id)
-    FROM userProfile u
+    SET followings = (SELECT COUNT(*) FROM users.followTable WHERE following_id = u.user_id)
+    FROM users.userProfile u
     INNER JOIN INSERTED i ON u.user_id = i.following_id;
+
+    -- Insert a notification for the user being followed
+    INSERT INTO notifications.notificationTable (user_id, post_id, sender_id, notification_type, created_at)
+    SELECT i.user_id, NULL, i.following_id, CONCAT((SELECT username FROM users.userProfile WHERE user_id = i.user_id), ' followed you'), GETDATE()
+    FROM INSERTED i
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM notifications.notificationTable n
+        WHERE n.user_id = i.following_id
+        AND n.sender_id = i.user_id
+        AND n.notification_type = CONCAT((SELECT username FROM users.userProfile WHERE user_id = i.user_id), ' followed you')
+    );
 END;
 
+
+
+
+DELETE followers from users.userProfile where username = 'Mtumishi'
+
+select * from users.followTable
+
 SELECT * FROM users.userProfile;
+select * from notifications.notificationTable
+
+
 
 --trigger to handle change of foreign keys in comment replies table
 CREATE TRIGGER tr_Delete_User
@@ -108,7 +117,7 @@ GO
 
 --notifcations trigger,
 --notifying after comment:
-CREATE TRIGGER commentPostTrigger
+CREATE  OR ALTER TRIGGER commentPostTrigger
 ON posts.commentsTable
 AFTER INSERT
 AS
@@ -153,7 +162,7 @@ END;
 
 
 --notifications triggers
-CREATE TRIGGER commentPostTrigger
+CREATE OR ALTER TRIGGER commentPostTrigger
 ON posts.commentsTable
 AFTER INSERT
 AS

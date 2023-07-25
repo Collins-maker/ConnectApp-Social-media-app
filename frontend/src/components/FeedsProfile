@@ -4,9 +4,8 @@ import "./feeds.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-function Feeds({ showShare }) {
+function FeedsProfile() {
   const [posts, setPosts] = useState([]);
-  const [selectedPost, setSelectedPost] = useState(null);
 
   useEffect(() => {
     fetchPosts();
@@ -25,33 +24,16 @@ function Feeds({ showShare }) {
     }
   };
 
-  const handlePostClick = (post) => {
-    setSelectedPost(post);
-  };
-
   return (
     <div className="feeds">
       <div className="feedsWrapper">
-        {showShare && <Share />}
-
+        <Share />
         {posts.map((p) => (
-          <Post key={p.post_id} post={p} onClick={() => handlePostClick(p)} />
+          <Post key={p.post_id} post={p} />
         ))}
       </div>
-      {selectedPost && (
-        <div className="postDetails">
-          {/* Render the details of the selected post */}
-          <h2>{selectedPost.title}</h2>
-          <p>{selectedPost.body}</p>
-          {/* Add comment functionality here */}
-        </div>
-      )}
     </div>
   );
 }
 
-Feeds.defaultProps = {
-  showShare: true,
-};
-
-export default Feeds;
+export default FeedsProfile;

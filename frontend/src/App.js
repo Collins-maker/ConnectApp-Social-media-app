@@ -16,10 +16,10 @@ function App() {
     <Router>
       <Routes>
       
-        <Route path='/signup' element={<Signup/>}/>
+        <Route path='/' element={<Signup/>}/>
         <Route path='/login' element={<Login/>}/>
-        <Route path ='/profile'element={<Profile/>}/>
-        <Route path='/' element={<Home/>}/>
+        <Route path ='/profile/:user_id' element={<Profile/>}/>
+        <Route path='/home' element={<Home/>}/>
       </Routes>
     </Router>
       

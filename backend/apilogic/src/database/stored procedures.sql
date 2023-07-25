@@ -46,15 +46,18 @@ END;
 
 -- Update user
 CREATE OR ALTER PROCEDURE updateUser
-    @first_name VARCHAR(50),
-    @last_name VARCHAR(255),
-    @username VARCHAR(255),
-    @email VARCHAR(50)
+	@user_id INT,
+    @gender VARCHAR(30),
+    @country VARCHAR(255),
+    @phone_number VARCHAR(255),
+    @date_of_birth VARCHAR(255),
+    @profile_image VARCHAR(1000),
+    @bio_data VARCHAR(MAX)
 AS
 BEGIN
     UPDATE users.userProfile
-    SET first_name = @first_name,last_name=@last_name,email_address = @email
-    WHERE username = @username;
+    SET gender = @gender,country=@country,phone_number=@phone_number,date_of_birth=@date_of_birth,profile_image=@profile_image,bio_data=@bio_data
+    WHERE user_id= @user_id;
 END;
 
 -- Delete user
@@ -92,6 +95,17 @@ END;
 
 --EXEC getUserByUsername @username='Mtumishi'
 
+CREATE OR ALTER PROCEDURE getUserByUserId
+    @user_id VARCHAR(30)
+AS
+BEGIN
+    SELECT *
+    FROM users.userProfile
+    WHERE user_id = @user_id;
+END;
+
+EXEC getUserByUserId @user_id = 4
+
 
 
 -- Get user posts
@@ -119,28 +133,39 @@ END;
 EXEC getUserByUsername 'Mtumishi'
 
 CREATE OR ALTER PROCEDURE follow
-@user_id INT NOT NULL,
-@following_id INT NOT NULL
+@user_id INT,
+@following_id INT 
 AS
 BEGIN
 INSERT INTO  users.followTable(user_id,following_id)
+VALUES (@user_id, @following_id);
+END;
+
+--EXEC follow @user_id = 56, @following_id = 55
 
 SELECT * FROM users.followTable
 
---POST  PROCEDURES
+select * from notifications.notificationTable
+
+select * from users.userProfile
+
+--POST  PROCEDURES...
+
+
+-- Insert Post
 -- Insert Post
 CREATE OR ALTER PROCEDURE insertPost
     @user_id INT,
     @written_text VARCHAR(255),
-    @image_url VARCHAR(255),
-    @video_url VARCHAR(255)
+    @media_url VARCHAR(255),
+    @media_type VARCHAR(255)
 AS
 BEGIN
 DECLARE @post_id INT;
 
  SELECT @post_id = ISNULL(MAX(post_id),0)+ 1 FROM posts.postTable;
-    INSERT INTO posts.postTable (user_id, written_text, image_url, video_url)
-    VALUES (@user_id, @written_text, @image_url, @video_url);
+    INSERT INTO posts.postTable (user_id, written_text, media_url, media_type)
+    VALUES (@user_id, @written_text, @media_url, @media_type);
 END;
 
 select * from posts.postTable;
@@ -148,13 +173,13 @@ select * from posts.postTable;
 -- Update Post
 CREATE OR ALTER PROCEDURE updatePost
     @post_id INT,
-    @written_text VARCHAR(255),
-    @image_url VARCHAR(255),
-    @video_url VARCHAR(255)
+    @written_text VARCHAR(1000),
+    @media_url VARCHAR(1000),
+    @media_type VARCHAR(1000)
 AS
 BEGIN
     UPDATE posts.postTable
-    SET written_text = @written_text, image_url = @image_url, video_url = @video_url
+    SET written_text = @written_text, media_url = @media_url, media_type = @media_type
     WHERE post_id = @post_id;
 END;
 
@@ -191,9 +216,12 @@ END;
 CREATE OR ALTER PROCEDURE getAllPosts
 AS
 BEGIN
-SELECT * FROM  posts.postTable
-WHERE is_deleted = 0
+    SELECT p.*, u.profile_image, u.username
+    FROM posts.postTable p
+    JOIN users.userProfile u ON p.user_id = u.user_id
+    WHERE p.is_deleted = 0;
 END;
+
 
 -- Get user posts
 CREATE OR ALTER PROCEDURE getUserPosts
@@ -299,7 +327,10 @@ SELECT * from posts.commentsTable
 WHERE post_id = @post_id
 END
 
-EXEC getAllPostComment 9;
+--EXEC getAllPostComment 40;
+
+--SELECT * FROM posts.postTable
+--SELECT * FROM posts.CommentTable
 
 SELECT * FROM users.userProfile
 

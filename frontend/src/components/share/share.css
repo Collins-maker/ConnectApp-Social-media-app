@@ -70,3 +70,13 @@ box-shadow: 0px 0px 16px -8px rgba(0,0,0,0.68);
     margin-right: 20px;
     cursor: pointer;
 }
+
+.previewImage{
+    height: 32px;
+    width: 32px;
+}
+
+.previewVideo{
+    height: 32px;
+    width: 32px;
+}  

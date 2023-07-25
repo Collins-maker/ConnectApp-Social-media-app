@@ -18,7 +18,7 @@ function Topbar() {
       <div className="topbarRight">
         <div className="topbarLinks">
           <span className="topbarLink">Home</span>
-          <span className="topbarLink">Timeline</span>
+          <span className="topbarLink">Logout</span>
         </div>
         <div className="topbarIcons">
           <div className="topbarIconsItem">

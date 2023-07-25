@@ -12,7 +12,7 @@ const authorize = require("./src/middlewares/session")
 const cors = require('cors')
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({origin:"http://localhost:3000",credentials:true}));
 
 const pool  = new sql.ConnectionPool(config)
 async function startApp() {
@@ -52,31 +52,14 @@ app.use(
 
     app.use((req, res, next) => {req.pool = pool;next();});
 
-    app.get(
-      "/",
-      (req, res, next) => {
-        let cont = true;
-        if (cont) {
-          next();
-        } else {
-          res.send("Error");
-        }
-      },
-      (req, res) => {
-        res.send("Ok");
-      }
-    );
 
-    // Example route that requires authentication
-app.get('/protected', authorize, (req, res) => {
-    // Authorized route handler logic
-    res.send('You have access to the protected route!');
-  });
 
-  app.get('/logout', (req, res)=>{
-    req.session.destroy();
-    res.send("Logout successfully")
-})
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.clearCookie('sessionID'); // Replace 'sessionID' with the name of your session cookie
+  res.send("Logout successfully");
+});
+
 
 app.use( authenticationRoutes);
 

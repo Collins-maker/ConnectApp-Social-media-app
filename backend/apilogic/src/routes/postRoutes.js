@@ -6,6 +6,7 @@ const { post } = require('./userRoutes');
 const postRoutes = express.Router();
 
 postRoutes.use(sessionAuth);
+
 postRoutes.get('/posts', getAllPosts);
 postRoutes.get('/posts/:post_id',getPostByID);
 postRoutes.get('/posts/:user_id',getFeedPosts);

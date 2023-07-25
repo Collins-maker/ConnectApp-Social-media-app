@@ -1,9 +1,29 @@
 import Online from "../online/Online";
 import "./rightbar.css";
 import { Users } from "../../dummyData";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 function Rightbar({ isProfilePage }) {
   const HomeRightbar = () => {
+
+    const [users, setUsers] = useState([]);
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("http://localhost:4001/users", {
+          withCredentials: true,
+        });
+        console.log(response.data.results);
+        setUsers(response.data.results);
+      } catch (error) {
+        console.log("Error Fetching users", error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchUsers();
+    }, []);
+
     return (
       <>
         <div className="birthdayContainer">
@@ -16,8 +36,8 @@ function Rightbar({ isProfilePage }) {
         </div>
         <h4 className="rightbarTitle">Online Friends</h4>
         <ul className="rightbarFriendsList">
-          {Users.map((u) => (
-            <Online key={u.id} user={u} />
+          {users.map((u) => (
+            <Online key={u.user_id} user={u} />
           ))}
         </ul>
       </>
