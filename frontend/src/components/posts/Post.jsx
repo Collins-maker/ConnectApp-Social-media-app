@@ -3,33 +3,9 @@ import { MoreVert } from "@mui/icons-material";
 import { useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import Comment from "../comments/Comments"; // Import the Comment component
 
-
-function Post({post }) {
-  const [comments, setComments] = useState([]);
-  const [showComments, setShowComments] = useState(false);
-
-  // Define the commentHandler function
-  const commentHandler = async (post_id) => {
-    try {
-      // Fetch comments for the post from the backend
-      const response = await axios.get(
-        `http://localhost:4001/comments/${post_id}`,
-        {
-          withCredentials: true,
-        }
-      );
-      console.log(response);
-
-      // Update the comments state with the fetched comments
-      setComments(response.data.results);
-      // Toggle the showComments state to display or hide the comments
-      setShowComments((prevShowComments) => !prevShowComments);
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-    }
-  };
-
+function Post({ post }) {
   const [like, setLike] = useState(post.like);
   const [isLiked, setIsLiked] = useState(false);
 
@@ -59,10 +35,11 @@ function Post({post }) {
   const handleProfileImageClick = () => {
     // Navigate to the profile page with the selected user's data as a prop
     window.location.href = `/profile/${post.user_id}`;
-
-    console.log(post.user_id)
+    console.log(post.user_id);
   };
-  
+
+  // const [commentCount, setCommentCount] = useState(post.Comment_count || 0);
+
 
   return (
     <div className="post">
@@ -70,14 +47,12 @@ function Post({post }) {
       {/* ... */}
       <div className="postWrapper">
         <div className="postTop">
-          <div className="postTopLeft"onClick={handleProfileImageClick} >
+          <div className="postTopLeft" onClick={handleProfileImageClick}>
             <img
               className="postProfileImg"
               src={post.profile_image}
               alt=""
-              
             />
-
             <span className="postUsername">{post.username}</span>
             <span className="postDate">{post.created_at}</span>
           </div>
@@ -85,7 +60,7 @@ function Post({post }) {
             <MoreVert />
           </div>
         </div>
-        <div className="postCenter" >
+        <div className="postCenter">
           <span className="postText">{post.written_text}</span>
           <img className="postImg" src={media_url} alt="" />
         </div>
@@ -108,27 +83,11 @@ function Post({post }) {
             </span>
           </div>
           <div className="postBottomRight">
-            <span
-              className="postCommentText"
-              onClick={() => commentHandler(post.post_id)}
-            >
-              {post.Comment_count} Comments
-            </span>
+            {/* Render the Comment component and pass the post ID */}
+            <Comment postId={post.post_id} commentCount={post.comment_count} />
           </div>
         </div>
-        {/* Display the comments if showComments is true */}
-        {showComments && comments?.length &&  (
-          <div>
-            <h3>Comments:</h3>
-            <ul>
-              {comments?.map((comment) => (
-                <li key={comment.comment_id}>{comment.text}</li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
-      
     </div>
   );
 }
