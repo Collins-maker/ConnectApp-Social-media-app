@@ -3,9 +3,10 @@ import { MoreVert } from "@mui/icons-material";
 import { useState } from "react";
 import axios from "axios";
 import PostPopup from "../popups/PostPopUp";
+import { useParams } from "react-router-dom";
 
 
-function Post({ post, onClick}) {
+function Post({post }) {
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
 
@@ -52,30 +53,27 @@ function Post({ post, onClick}) {
   const isImage = post.media_type && post.media_type.startsWith("image");
   const media_url = isImage ? post.media_url : post.media_url; // Use media_type as image URL if it's not a valid Cloudinary UR
 
-
+  const { user_id } = useParams();
   const handleProfileImageClick = () => {
-    // Handle the onClick event for the profile image
-    // Redirect to the profile page when the profile image is clicked
-    window.location.href = `/profile/${post.user_id}`; // Replace "/profiles" with the actual route to your profiles page and "post.user_id" with the user ID of the profile
+    // Navigate to the profile page with the selected user's data as a prop
+    window.location.href = `/profile/${post.user_id}`;
   };
+  
 
   return (
-    <div className="post"    >
-
-
-    {/* Render the post content as usual */}
-    {/* ... */}
-      <div className="postWrapper" >
+    <div className="post">
+      {/* Render the post content as usual */}
+      {/* ... */}
+      <div className="postWrapper">
         <div className="postTop">
           <div className="postTopLeft">
-          <a href={`/profile/${post.user_id}`} onClick={(e) => e.preventDefault()}>
-              <img
-                className="postProfileImg"
-                src={post.profile_image}
-                alt=""
-                onClick={handleProfileImageClick}
-              />
-            </a>
+            <img
+              className="postProfileImg"
+              src={post.profile_image}
+              alt=""
+              onClick={handleProfileImageClick}
+            />
+
             <span className="postUsername">{post.username}</span>
             <span className="postDate">{post.created_at}</span>
           </div>
@@ -83,7 +81,7 @@ function Post({ post, onClick}) {
             <MoreVert />
           </div>
         </div>
-        <div className="postCenter" onClick={()=>setShowPostPopup(true) }>
+        <div className="postCenter" onClick={() => setShowPostPopup(true)}>
           <span className="postText">{post.written_text}</span>
           <img className="postImg" src={media_url} alt="" />
         </div>
@@ -125,15 +123,10 @@ function Post({ post, onClick}) {
             </ul>
           </div>
         )}
-
       </div>
-      {showPostPopup && (
-        <PostPopup
-          post={post}
-          onClose={() => setShowPostPopup(false)}
-        /> // Conditionally render the PostPopup component
-      )}
-
+      {/* {showPostPopup && (
+        <PostPopup post={post} onClose={() => setShowPostPopup(false)} /> // Conditionally render the PostPopup component
+      )} */}
     </div>
   );
 }

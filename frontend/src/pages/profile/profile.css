@@ -4,7 +4,11 @@
 
 .profileRight{
     flex: 9;
+    display: flex;
+    flex-direction: column;
 }
+
+
 
 .profileCover{
     height: 320px;
@@ -47,4 +51,24 @@
 
 .profileRightBottom{
     display: flex;
+    flex-direction: column;
+}
+
+.profileFunctinality{
+   border: 2px solid red;
+   margin: 10px auto;
+   width: 80%;
+   display: flex;
+   flex-direction: row;
+   justify-content: space-around;
+   
+}
+
+.profileFunctinality button{
+    width: 20%;
+    display: flex;
+    padding: 1rem;
+    text-align: center;
+    
+
 }
