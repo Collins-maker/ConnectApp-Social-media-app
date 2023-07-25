@@ -58,16 +58,16 @@ const config = require('../config/config');
 }
 
 async function followUser(req,res){
-  let follow =req.body;
+  let user_id =req.params.user_id
 
   const following_id = req.session?.user.user_id;
 try {
  let pool = req.pool;
  if (pool.connected) {
    let results =await pool.request() 
-                          .input('user_id', )
+                          .input('user_id',user_id )
                           .input('following_id', following_id)
-                          .execute('posts.likePost')
+                          .execute('follow')
 
                           console.log(results)
 
@@ -88,14 +88,14 @@ res.status(200).json({
 }
 
  async function getUsersFollowers(req, res) {
-  const user_id = req.session?.user.user_id;
+  const username = req.session?.user.username;
    let users;
  
    try {
      let sql = await mssql.connect(config);
      if (sql.connected) {
        let results = await sql.request()
-         .input('user_id', user_id)
+         .input('username', username)
          .execute('getUserFollowers');
  
        users = results.recordset;
@@ -121,4 +121,4 @@ res.status(200).json({
  
 
 
- module.exports ={getAllUsers, getUsersByUsername, getUsersFollowers, getUsersByUserId}
+ module.exports ={getAllUsers, getUsersByUsername, getUsersFollowers, getUsersByUserId, followUser}

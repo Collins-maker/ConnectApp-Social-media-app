@@ -59,7 +59,7 @@ BEGIN
 END;
 
 
-CREATE TRIGGER users.updateFollowerCount
+CREATE OR ALTER TRIGGER users.updateFollowerCount
 ON users.followTable
 AFTER INSERT, DELETE
 AS
@@ -79,7 +79,11 @@ BEGIN
     INNER JOIN INSERTED i ON u.user_id = i.following_id;
 END;
 
+DELETE users.followTable
+
 SELECT * FROM users.userProfile;
+
+
 
 --trigger to handle change of foreign keys in comment replies table
 CREATE TRIGGER tr_Delete_User

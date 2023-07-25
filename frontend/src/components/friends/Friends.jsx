@@ -2,15 +2,16 @@ import "./friends.css";
 import React from "react";
 import axios from "axios";
 
-function Friends({ user }) {
-const handleFollow=async()=>{
+function Friends({ user}) {
+const handleFollow=async(user_id)=>{
 try {
-  const response = await axios.get(
-        `http://localhost:4001/follow/`,
+  const response = await axios.post(
+        `http://localhost:4001/follow/${user_id}`, {},
         {
           withCredentials: true,
         }
   );
+  console.log(user_id);
 
 } catch (error) {
   console.log("an error occured while following", error)
@@ -24,7 +25,7 @@ try {
       <span className="sidebarfriendName">{user.username}</span>
       </div>
       
-      <button className= "followButton" onClick={handleFollow}>follow</button>
+      <button className= "followButton" onClick={() => handleFollow(user.user_id)}>follow</button>
     </li>
   );
 }

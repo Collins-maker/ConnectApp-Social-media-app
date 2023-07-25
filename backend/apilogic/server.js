@@ -44,6 +44,7 @@ async function startApp() {
 
 app.use(async(req,res,next)=>{
   let cookie = req.headers['cookie']
+  console.log(cookie)
   if (cookie && typeof cookie === 'string') {
     let sessionID = cookie.substring(16, 52);
     let session = await redisClient.get(sessionID);

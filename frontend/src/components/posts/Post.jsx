@@ -53,6 +53,11 @@ function Post({ post, onClick}) {
   const media_url = isImage ? post.media_url : post.media_url; // Use media_type as image URL if it's not a valid Cloudinary UR
 
 
+  const handleProfileImageClick = () => {
+    // Handle the onClick event for the profile image
+    // Redirect to the profile page when the profile image is clicked
+    window.location.href = `/profile/${post.user_id}`; // Replace "/profiles" with the actual route to your profiles page and "post.user_id" with the user ID of the profile
+  };
 
   return (
     <div className="post"    >
@@ -63,7 +68,14 @@ function Post({ post, onClick}) {
       <div className="postWrapper" >
         <div className="postTop">
           <div className="postTopLeft">
-            <img className="postProfileImg" src={post.profile_image}  alt="" />
+          <a href={`/profile/${post.user_id}`} onClick={(e) => e.preventDefault()}>
+              <img
+                className="postProfileImg"
+                src={post.profile_image}
+                alt=""
+                onClick={handleProfileImageClick}
+              />
+            </a>
             <span className="postUsername">{post.username}</span>
             <span className="postDate">{post.created_at}</span>
           </div>
