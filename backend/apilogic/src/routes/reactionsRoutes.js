@@ -10,7 +10,7 @@ reactionRoutes.post('/like', likePost);
 
 reactionRoutes.post('/comment', insertComment);
 
-reactionRoutes.get('/comment/:post_id', getAllPostComments);
+reactionRoutes.get('/comments/:post_id', getAllPostComments);
 
 reactionRoutes.post('/reply',replyComment);
 

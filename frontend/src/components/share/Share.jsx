@@ -118,6 +118,7 @@ function Share({ fetchPosts}) {
                 type="file"
                 id="file"
                 accept=".png,.jpeg,.jpg,.gif,.mp4"
+                ref={mediaRef}
                 onChange={onMediaChange}
               />
             </div>

@@ -2,15 +2,14 @@ import "./post.css";
 import { MoreVert } from "@mui/icons-material";
 import { useState } from "react";
 import axios from "axios";
-import PostPopup from "../popups/PostPopUp";
 import { useParams } from "react-router-dom";
 
 
 function Post({post }) {
-  const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
+  const [showComments, setShowComments] = useState(false);
 
-  const [showPostPopup, setShowPostPopup] = useState(false);
+  // Define the commentHandler function
   const commentHandler = async (post_id) => {
     try {
       // Fetch comments for the post from the backend
@@ -20,9 +19,12 @@ function Post({post }) {
           withCredentials: true,
         }
       );
-      console.log(response.data);
-      setComments(response.data.comments);
-      setShowComments(!showComments);
+      console.log(response);
+
+      // Update the comments state with the fetched comments
+      setComments(response.data.results);
+      // Toggle the showComments state to display or hide the comments
+      setShowComments((prevShowComments) => !prevShowComments);
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
@@ -57,6 +59,8 @@ function Post({post }) {
   const handleProfileImageClick = () => {
     // Navigate to the profile page with the selected user's data as a prop
     window.location.href = `/profile/${post.user_id}`;
+
+    console.log(post.user_id)
   };
   
 
@@ -66,12 +70,12 @@ function Post({post }) {
       {/* ... */}
       <div className="postWrapper">
         <div className="postTop">
-          <div className="postTopLeft">
+          <div className="postTopLeft"onClick={handleProfileImageClick} >
             <img
               className="postProfileImg"
               src={post.profile_image}
               alt=""
-              onClick={handleProfileImageClick}
+              
             />
 
             <span className="postUsername">{post.username}</span>
@@ -81,7 +85,7 @@ function Post({post }) {
             <MoreVert />
           </div>
         </div>
-        <div className="postCenter" onClick={() => setShowPostPopup(true)}>
+        <div className="postCenter" >
           <span className="postText">{post.written_text}</span>
           <img className="postImg" src={media_url} alt="" />
         </div>
@@ -113,20 +117,18 @@ function Post({post }) {
           </div>
         </div>
         {/* Display the comments if showComments is true */}
-        {showComments && (
+        {showComments && comments?.length &&  (
           <div>
             <h3>Comments:</h3>
             <ul>
-              {comments.map((comment) => (
+              {comments?.map((comment) => (
                 <li key={comment.comment_id}>{comment.text}</li>
               ))}
             </ul>
           </div>
         )}
       </div>
-      {/* {showPostPopup && (
-        <PostPopup post={post} onClose={() => setShowPostPopup(false)} /> // Conditionally render the PostPopup component
-      )} */}
+      
     </div>
   );
 }

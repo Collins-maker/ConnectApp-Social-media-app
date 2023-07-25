@@ -95,6 +95,17 @@ END;
 
 --EXEC getUserByUsername @username='Mtumishi'
 
+CREATE OR ALTER PROCEDURE getUserByUserId
+    @user_id VARCHAR(30)
+AS
+BEGIN
+    SELECT *
+    FROM users.userProfile
+    WHERE user_id = @user_id;
+END;
+
+EXEC getUserByUserId @user_id = 4
+
 
 
 -- Get user posts
@@ -122,13 +133,21 @@ END;
 EXEC getUserByUsername 'Mtumishi'
 
 CREATE OR ALTER PROCEDURE follow
-@user_id INT NOT NULL,
-@following_id INT NOT NULL
+@user_id INT,
+@following_id INT 
 AS
 BEGIN
 INSERT INTO  users.followTable(user_id,following_id)
+VALUES (@user_id, @following_id);
+END;
+
+--EXEC follow @user_id = 56, @following_id = 55
 
 SELECT * FROM users.followTable
+
+select * from notifications.notificationTable
+
+select * from users.userProfile
 
 --POST  PROCEDURES...
 

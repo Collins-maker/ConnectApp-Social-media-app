@@ -67,7 +67,7 @@ async function insertComment(req,res){
       .input('post_id', post_id)
       .execute('getAllPostComment');
 
-    console.log(results);
+    console.log(results.recordset);
     post = results.recordset; // Assign the value to the post variable
   }
 

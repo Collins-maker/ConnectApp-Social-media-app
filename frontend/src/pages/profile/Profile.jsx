@@ -18,7 +18,8 @@ export default function Profile() {
         const response = await axios.get(`http://localhost:4001/user/${user_id}`, {
           withCredentials: true,
         });
-        setSelectedUser(response.data); // Set the selected user data in state
+        console.log(response)
+        setSelectedUser(response.data.result); // Set the selected user data in state
       } catch (error) {
         console.log("Error Fetching user", error);
       }
@@ -41,11 +42,11 @@ export default function Profile() {
           <div className="profileRightTop">
             <div className="profileCover">
               <img className="profileCoverImg" src="assets/post/3.jpeg" alt="" />
-              <img className="profileUserImg" src={"assets/person/1.jpeg"} alt="" />
+              <img className="profileUserImg" src={selectedUser.profile_image} alt="" />
             </div>
             <div className="profileInfo">
-              <h4 className="profileInfoName">{selectedUser.name}</h4>
-              <span className="profileInfoDesc">{selectedUser.bio}</span>
+              <h4 className="profileInfoName">{selectedUser.username}</h4>
+              <span className="profileInfoDesc">{selectedUser.email_address}</span>
             </div>
           </div>
           

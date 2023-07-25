@@ -18,9 +18,16 @@ try {
 }
 }
 
+const handleProfileImageClick = () => {
+  // Navigate to the profile page with the selected user's data as a prop
+  window.location.href = `/profile/${user.user_id}`;
+
+  console.log(user.user_id)
+};
+
   return (
     <li className="sidebarFriend">
-      <div className="friend">
+      <div className="friend" onClick={handleProfileImageClick}>
       <img className="sidebarFriendImg" src={user.profilePicture} alt="" />
       <span className="sidebarfriendName">{user.username}</span>
       </div>
