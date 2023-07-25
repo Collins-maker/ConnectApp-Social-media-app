@@ -59,6 +59,11 @@ function Comment({ postId, commentCount}) {
     }
   };
 
+  const handleCloseComments = () => {
+    setShowComments(false);
+    setShowTextArea(false);
+  };
+
   return (
     <div>
       {/* Display the comments if showComments is true */}
@@ -88,6 +93,7 @@ function Comment({ postId, commentCount}) {
             placeholder="Enter your comment..."
           />
           <button onClick={handleCommentSubmit}>Submit Comment</button>
+          <button onClick={handleCloseComments}>Close</button>
         </div>
       )}
     </div>
