@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
+import { AuthContext } from "../context/authContext";
 
 function Comment({ postId, commentCount}) {
+  const { currentUser }= useContext(AuthContext);
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
   const [showTextArea, setShowTextArea] = useState(false); // State to track whether to show the text area
@@ -64,6 +66,57 @@ function Comment({ postId, commentCount}) {
     setShowTextArea(false);
   };
 
+  // Function to handle updating a comment
+  const handleUpdateComment = async (commentId, updatedText) => {
+    try {
+      // Send the updated comment to the backend
+      const response = await axios.put(
+        `http://localhost:4001/comments/${commentId}`,
+        {
+          comment_text: updatedText,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      // If the comment was successfully updated in the backend, update the comments state
+      if (response.data.success) {
+        // Fetch the updated comments for the post from the backend
+        const updatedResponse = await axios.get(`http://localhost:4001/comments/${postId}`, {
+          withCredentials: true,
+        });
+        // Update the comments state with the updated comments
+        setComments(updatedResponse.data.results);
+      }
+    } catch (error) {
+      console.error("Error updating comment:", error);
+    }
+  };
+
+  // Function to handle deleting a comment
+  const handleDeleteComment = async (commentId) => {
+    try {
+      // Send the request to delete the comment to the backend
+      const response = await axios.delete(`http://localhost:4001/comments/${commentId}`, {
+        withCredentials: true,
+      });
+
+      // If the comment was successfully deleted in the backend, update the comments state
+      if (response.data.success) {
+        // Fetch the updated comments for the post from the backend
+        const updatedResponse = await axios.get(`http://localhost:4001/comments/${postId}`, {
+          withCredentials: true,
+        });
+        // Update the comments state with the updated comments
+        setComments(updatedResponse.data.results);
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+
+
   return (
     <div>
       {/* Display the comments if showComments is true */}
@@ -72,7 +125,21 @@ function Comment({ postId, commentCount}) {
           <h3>Comments:</h3>
           <ul>
             {comments?.map((comment) => (
-              <li key={comment.comment_id}>{comment.comment_text}</li>
+              <li key={comment.comment_id}>
+                <strong>{comment.username}: </strong>
+                {comment.comment_text}
+                 {/* Add buttons to update and delete the comment */}
+                 {currentUser && currentUser.id === comment.user_id && (
+                  <>
+                    <button onClick={() => handleUpdateComment(comment.comment_id, "Updated Comment Text")}>
+                      Update
+                    </button>
+                    <button onClick={() => handleDeleteComment(comment.comment_id)}>
+                      Delete
+                    </button>
+                  </>
+                )}
+                </li>
             ))}
           </ul>
         </div>

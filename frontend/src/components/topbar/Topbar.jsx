@@ -1,7 +1,10 @@
+import { useContext } from "react";
 import "./topbar.css";
 import { Search, Person, Notifications } from "@mui/icons-material";
+import { AuthContext } from "../context/authContext";
 
 function Topbar() {
+  const { currentUser } = useContext(AuthContext);
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">

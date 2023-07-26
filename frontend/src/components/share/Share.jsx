@@ -4,8 +4,11 @@ import { useState,useRef } from "react";
 import axios from "axios";
 import { UilTimes } from "@iconscout/react-unicons";
 import {Cloudinary} from "@cloudinary/url-gen";
+import { AuthContext } from "../context/authContext";
+import { useContext } from "react";
 
 function Share({ fetchPosts}) {
+  const { currentUser }= useContext(AuthContext);
 
   const [media_type, setmedia_type] = useState(null);
   const [previewMedia, setPreviewMedia] = useState(null);

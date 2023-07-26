@@ -1,13 +1,17 @@
 import "./profile.css";
+import UpdateUser from "../../components/updateProfile/UpdateProfile";
 import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Feeds from "../../components/feeds/Feeds";
 import Rightbar from "../../components/rightbar/Rightbar";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,  useNavigate  } from "react-router-dom";
+
+
 
 export default function Profile() {
+  const navigate = useNavigate();
   const [selectedUser, setSelectedUser] = useState(null);
   const { user_id } = useParams(); // Extract user_id from the URL
 
@@ -33,6 +37,11 @@ export default function Profile() {
     return <div>Loading...</div>;
   }
 
+  const handleUpdateProfile = () => {
+    // Navigate to the UpdateUser page with the user_id as a parameter
+    navigate(`/update-user/${user_id}`);
+  }; 
+
   return (
     <>
       <Topbar />
@@ -52,7 +61,10 @@ export default function Profile() {
           
           <div className="profileRightBottom">
             <div className="profileFunctinality">
-              <button className="updateButton">Updadate</button>
+                {/* Step 3: Add onClick event */}
+                <button className="updateButton" onClick={handleUpdateProfile}>
+              Update
+            </button>
               <button className="followersButton">Followers</button>
               <button className="updateButton">Following</button>
             </div>
@@ -65,6 +77,8 @@ export default function Profile() {
           </div>
         </div>
       </div>
+      {/* Render the UpdateUser component and pass the selectedUser as the user prop */}
+    {selectedUser && <UpdateUser user={selectedUser} />}
     </>
   );
 }
