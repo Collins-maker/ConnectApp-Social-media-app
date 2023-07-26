@@ -18,6 +18,7 @@ export default function Profile() {
   useEffect(() => {
     // Fetch the user data based on the user_id
     const fetchUser = async () => {
+      console.log(user_id)
       try {
         const response = await axios.get(`http://localhost:4001/user/${user_id}`, {
           withCredentials: true,
