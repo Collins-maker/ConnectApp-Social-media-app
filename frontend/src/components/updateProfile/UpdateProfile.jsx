@@ -4,8 +4,36 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { Image } from 'cloudinary-react';
 import { AuthContext } from '../context/authContext';
+import {  useEffect, useState } from "react";
+import { useParams,  useNavigate  } from "react-router-dom";
+
+
+
 
 const UpdateUser = ({ user }) => {
+  const { user_id } = useParams();
+  const [selectedUser, setSelectedUser] = useState(null); 
+
+  useEffect(() => {
+    // Fetch the user data based on the user_id
+    const fetchUser = async () => {
+      console.log(user_id)
+      try {
+        const response = await axios.get(`http://localhost:4001/user/${user_id}`, {
+          withCredentials: true,
+        });
+        console.log(response)
+        setSelectedUser(response.data.result); // Set the selected user data in state
+      } catch (error) {
+        console.log("Error Fetching user", error);
+      }
+    };
+
+    fetchUser();
+  }, [user_id]);
+
+
+  console.log(selectedUser)
   const { currentUser } = useContext(AuthContext);
   const { register, handleSubmit, setValue } = useForm();
   const cloud_name = "dkifguyks";
@@ -49,7 +77,10 @@ const UpdateUser = ({ user }) => {
   const onSubmit = async (data) => {
     try {
       // Send the updated user data to the server
-      const response = await axios.put(`http://localhost:4001/users/${user.user_id}`, data);
+      console.log(currentUser)
+      const response = await axios.put(`http://localhost:4001/users/${selectedUser.user_id}`, data,{
+        withCredentials:true
+      });
       console.log('User updated:', response.data);
     } catch (error) {
       console.error('Error updating user:', error);
@@ -106,15 +137,15 @@ const UpdateUser = ({ user }) => {
       <input type="date" {...register('date_of_birth')} />
 
       <label>Profile Picture</label>
-      <input type="file" onChange={(e) => handleImageUpload('profile_image', e)} />
+      <input type="file" onChange={(e) => handleImageUpload} />
 
       <label>Cover Image</label>
-      <input type="file" onChange={(e) => handleImageUpload('cover_image', e)} />
+      <input type="file" onChange={(e) => handleImageUpload} />
 
       {/* Show the current profile and cover images if available */}
       {profile_image ? (
         <Image
-          cloudName="your_cloud_name"
+          cloudName={cloud_name}
           publicId={profile_image}
           width="150"
           height="150"
@@ -129,7 +160,7 @@ const UpdateUser = ({ user }) => {
 
       {cover_image ? (
         <Image
-          cloudName="your_cloud_name"
+          cloudName={cloud_name}
           publicId={cover_image}
           width="500"
           height="200"

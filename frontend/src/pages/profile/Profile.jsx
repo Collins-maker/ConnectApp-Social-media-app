@@ -5,12 +5,14 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import Feeds from "../../components/feeds/Feeds";
 import Rightbar from "../../components/rightbar/Rightbar";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams,  useNavigate  } from "react-router-dom";
+import { AuthContext } from "../../components/context/authContext";
 
 
 
 export default function Profile() {
+  const{ currentUser} =useContext(AuthContext)
   const navigate = useNavigate();
   const [selectedUser, setSelectedUser] = useState(null);
   const { user_id } = useParams(); // Extract user_id from the URL

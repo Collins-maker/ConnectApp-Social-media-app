@@ -45,7 +45,12 @@ CREATE TABLE users.followTable(
   user_id INT FOREIGN KEY REFERENCES users.userProfile(user_id) ,
   following_id INT FOREIGN KEY REFERENCES users.userProfile(user_id) ,
   created_at DATETIME NOT NULL DEFAULT GETDATE()
+  is_deleted BIT NOT NULL DEFAULT 0
 );
+
+
+
+select * from users.followTable
 
 CREATE TABLE posts.postTable(
     post_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
