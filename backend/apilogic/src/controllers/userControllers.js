@@ -153,6 +153,37 @@ async function followUser(req, res) {
   }
 }
 
+//unfollow user
+async function unfollowUser(req, res) {
+ 
+  let user_id = req.params.user_id;
+
+  const following_id = req.session?.user.user_id;
+  try {
+    let pool = req.pool;
+    if (pool.connected) {
+      let results = await pool
+        .request()
+        .input("user_id", user_id)
+        .input("following_id", following_id)
+        .execute("unfollow");
+
+      console.log(results);
+    }
+    res.status(200).json({
+      success: true,
+      message: `You have unfollowed ${user_id}`,
+    });
+  } catch (error) {
+    console.error("Error unfollowing:", error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while unfollowing user",
+    });
+  }
+}
+
+
 async function getUsersFollowers(req, res) {
   const username = req.session?.user.username;
   let users;
@@ -192,5 +223,6 @@ module.exports = {
   getUsersFollowers,
   getUsersByUserId,
   followUser,
+  unfollowUser,
   updateUserProfile
 };
