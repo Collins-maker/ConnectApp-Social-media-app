@@ -1,5 +1,5 @@
 const express = require('express');
-const {getAllUsers, getUsersByUsername, getUsersFollowers, followUser, getUsersByUserId} =require('../controllers/userControllers');
+const {getAllUsers, getUsersByUsername, getUsersFollowers, followUser,unfollowUser, getUsersByUserId, updateUserProfile} =require('../controllers/userControllers');
 const{sessionAuth} =require('../middlewares/sessionAuth');
 
 const userRoutes = express.Router();
@@ -10,6 +10,8 @@ userRoutes.get('/users/:username',getUsersByUsername);
 
 userRoutes.get('/user/:user_id',getUsersByUserId);
 userRoutes.get('/followers/:user_id',getUsersFollowers);
-userRoutes.post('/follow/:user_id', followUser)
+userRoutes.post('/follow/:user_id', followUser);
+userRoutes.post('/unfollow/:user_id', unfollowUser);
+userRoutes.put('/users/:user_id', updateUserProfile)
 
 module.exports = userRoutes

@@ -70,10 +70,13 @@ BEGIN
     WHERE username = @username;
 END;
 
+EXEC deleteUser @username = 'Davi'
+
+
 --DELETE FROM  users.userProfile
 --WHERE username = 'Mtumishi'
 
---select * from users.userProfile
+select * from users.userProfile
 
 --DELETE FROM  posts.postTable
 --WHERE user_id = 5
@@ -89,11 +92,11 @@ AS
 BEGIN
     SELECT *
     FROM users.userProfile
-    WHERE username = @username;
+    WHERE username = @username AND is_deleted =0;
 END;
 
 
---EXEC getUserByUsername @username='Mtumishi'
+EXEC getUserByUsername @username='Davi'
 
 CREATE OR ALTER PROCEDURE getUserByUserId
     @user_id VARCHAR(30)
@@ -101,7 +104,7 @@ AS
 BEGIN
     SELECT *
     FROM users.userProfile
-    WHERE user_id = @user_id;
+    WHERE user_id = @user_id AND is_deleted =0;
 END;
 
 EXEC getUserByUserId @user_id = 4
@@ -141,13 +144,38 @@ INSERT INTO  users.followTable(user_id,following_id)
 VALUES (@user_id, @following_id);
 END;
 
---EXEC follow @user_id = 56, @following_id = 55
+CREATE OR ALTER PROCEDURE unfollow
+@user_id INT,
+@following_id INT 
+AS
+BEGIN
+ Update users.followTable
+    SET is_deleted=1
+    WHERE user_id = @user_id AND follow_id = @following_id
+END;
 
+EXEC unfollow @user_id = 57, @following_id = 56
+
+select * from users.userProfile
 SELECT * FROM users.followTable
 
 select * from notifications.notificationTable
 
-select * from users.userProfile
+
+
+--unfollow 
+CREATE OR ALTER PROCEDURE unfollow
+    @user_id INT,
+    @following_id INT 
+AS
+BEGIN
+    UPDATE users.followTable
+    SET is_deleted = 1
+    WHERE user_id = @user_id AND follow_id = @following_id;
+END;
+
+EXEC unfollow @user_id = 57, @following_id = 56
+
 
 --POST  PROCEDURES...
 
