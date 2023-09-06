@@ -137,10 +137,10 @@ const UpdateUser = ({ user }) => {
       <input type="date" {...register('date_of_birth')} />
 
       <label>Profile Picture</label>
-      <input type="file" onChange={(e) => handleImageUpload} />
+      <input type="file" onChange={(e) => handleImageUpload(e)} />
 
       <label>Cover Image</label>
-      <input type="file" onChange={(e) => handleImageUpload} />
+      <input type="file" onChange={(e) => handleImageUpload(e)} />
 
       {/* Show the current profile and cover images if available */}
       {profile_image ? (
