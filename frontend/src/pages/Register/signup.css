@@ -15,8 +15,9 @@
   }
   
   .form-container {
+    height: 100%;
     width: 650px;
-    margin: 20px auto;
+    margin: 0 auto;
   }
   
   input {

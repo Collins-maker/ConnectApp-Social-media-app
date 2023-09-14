@@ -24,12 +24,18 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     // When the component mounts, check if user data is available in localStorage
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      setCurrentUser(user);
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+        setCurrentUser(user);
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+        setCurrentUser(null);
+      }
     }
   }, []);
-
+  
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(currentUser));
   }, [currentUser]);
