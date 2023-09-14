@@ -2,10 +2,11 @@ const mssql = require("mssql");
 const config = require("../config/config");
 
 async function updateUserProfile(req, res) {
+  let user_id = req.params.user_id;
   try {
     let user = req.body;
     // Ensure the user_id is present in the request body
-    if (!user.user_id) {
+    if (!user_id) {
       return res.status(400).json({
         success: false,
         message: 'user_id is required in the request body',
@@ -16,7 +17,7 @@ async function updateUserProfile(req, res) {
     if (sql.connected) {
       let results = await sql
         .request()
-        .input('user_id', user.user_id)
+        .input('user_id', user_id)
         .input('first_name', user.first_name)
         .input('last_name', user.last_name)
         .input('username', user.username)

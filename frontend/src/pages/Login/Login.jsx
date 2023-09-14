@@ -79,7 +79,7 @@ const Login = () => {
         <p>Make sure it's at least 8 characters including a number and a lowercase letter.</p>
         <button>Login</button>
         <h6>
-          Have no account account Yet?<Link to="/signup">Register</Link>{" "}
+          Have no account account Yet?<Link to="/">Register</Link>
         </h6>
       </form>
     </div>

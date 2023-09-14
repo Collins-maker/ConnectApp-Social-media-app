@@ -9,6 +9,8 @@ import { useContext } from "react";
 
 function Share({ fetchPosts}) {
   const { currentUser }= useContext(AuthContext);
+  //check if currentUser data is being accessed at this point
+  console.log(currentUser)
 
   const [media_type, setmedia_type] = useState(null);
   const [previewMedia, setPreviewMedia] = useState(null);
@@ -100,7 +102,7 @@ function Share({ fetchPosts}) {
     <div className="share">
       <div className="shareWrapper">
         <div className="shareTop">
-          <img className="shareProfileImg" src="/assets/person/1.jpeg" alt="" />
+          <img className="shareProfileImg" src={"/assets/person/1.jpeg"} alt="" />
           <input
             placeholder="What are you thinking about now?"
             className="shareInput"
